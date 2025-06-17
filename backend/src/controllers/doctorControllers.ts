@@ -3,6 +3,7 @@ import { CustomRequest } from "../types/customRequest";
 import {
   allAppointmentService,
   editAvailableSlotsService,
+  updateAppointmentStatusService,
 } from "../services/doctorServices";
 
 //edit available slot controller
@@ -43,5 +44,24 @@ export const allAppointmentsController = async (
       .json({ message: result.message, data: result.appointments });
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+//Update status of appointment
+export const updateAppointmentStatusController = async (
+  req: CustomRequest,
+  res: Response
+) => {
+  const { appointmentId } = req.params;
+  const { status } = req.body;
+  try {
+    const result = await updateAppointmentStatusService(appointmentId, status);
+    if (!result.success) {
+      res.status(400).json({ message: result.message });
+      return;
+    }
+    res.status(200).json({ message: result.message, data: result.updated });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error", error: err });
   }
 };

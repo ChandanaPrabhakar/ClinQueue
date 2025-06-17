@@ -47,3 +47,32 @@ export const allAppointmentService = async (doctorId: string) => {
     throw new Error("Failed to fetch appointments");
   }
 };
+
+//update appointment status
+export const updateAppointmentStatusService = async (
+  appointmentId: string,
+  status: "completed" | "cancelled"
+) => {
+  try {
+    const validStatuses = ["completed", "cancelled"];
+
+    if (!validStatuses.includes(status)) {
+      throw new Error("Invalid status");
+    }
+
+    const updated = await Appointment.findByIdAndUpdate(
+      appointmentId,
+      { $set: { status } },
+      { new: true }
+    );
+
+    return {
+      success: true,
+      message: "Status updated",
+      updated,
+    };
+  } catch (err) {
+    console.error("Error updating appointment", err);
+    throw new Error("Failed to update appointment");
+  }
+};

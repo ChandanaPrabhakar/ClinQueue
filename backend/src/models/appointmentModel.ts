@@ -7,6 +7,7 @@ export interface AppointmentInterface extends Document {
   doctorName: string;
   doctorSpec: string;
   timeSlot: string;
+  status: "completed" | "cancelled" | "booked";
   userId: string;
   doctorId: string;
 }
@@ -35,6 +36,12 @@ const AppointmentSchema = new mongoose.Schema(
     },
     timeSlot: {
       type: String,
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: ["booked", "completed", "cancelled"],
+      default: "booked",
       required: true,
     },
     userId: {

@@ -22,4 +22,11 @@ router.get(
   allAppointmentsController
 );
 
+//update appointment status
+router.patch(
+  "/appointments/appointmentId/:appointmentId",
+  verifyToken,
+  authorizeVerify("doctor", "admin")
+);
+
 export default router;
