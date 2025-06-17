@@ -43,6 +43,7 @@ export const bookAppointmentService = async (
       doctorSpec: doctorData?.specialization,
       timeSlot,
       userId: id,
+      doctorId,
     });
 
     const saveAppointment = await appointmentData.save();
