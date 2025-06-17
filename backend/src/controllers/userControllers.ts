@@ -3,6 +3,7 @@ import {
   allAppointmentsService,
   bookAppointmentService,
   deleteAppointmentService,
+  editUserProfileService,
   updateAppointmentService,
 } from "../services/userServices";
 import { CustomRequest } from "../types/customRequest";
@@ -18,6 +19,7 @@ export const bookAppointmentController = async (
     const result = await bookAppointmentService(id, doctorId, timeSlot);
     if (!result.success) {
       res.status(400).json({ message: result.message });
+      return;
     }
     res
       .status(201)
@@ -37,6 +39,7 @@ export const allAppointmentsController = async (
     const result = await allAppointmentsService(id);
     if (!result.success) {
       res.status(404).json({ message: result.message });
+      return;
     }
     res
       .status(200)
@@ -57,6 +60,7 @@ export const deleteAppointmentController = async (
     const result = await deleteAppointmentService(userId, appointmentId);
     if (!result.success) {
       res.status(404).json({ message: result.message });
+      return;
     }
     res.status(200).json({ message: result.message });
   } catch (err) {
@@ -74,6 +78,7 @@ export const updateAppointmentController = async (
   const { timeSlot } = req.body;
   if (!timeSlot) {
     res.status(400).json({ message: "No changes provided" });
+    return;
   }
   try {
     const result = await updateAppointmentService(
@@ -87,6 +92,37 @@ export const updateAppointmentController = async (
     res
       .status(200)
       .json({ message: result.message, data: result.updateAppointment });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error", error: err });
+  }
+};
+
+//Edit user profile controller
+export const editUserProfileController = async (
+  req: CustomRequest,
+  res: Response
+) => {
+  const userId = req.user?.id as string;
+  const { fullName, age, phoneNumber } = req.body;
+
+  if (!fullName && !age && !phoneNumber) {
+    res.json(400).json({ message: "No change provided" });
+    return;
+  }
+  try {
+    const result = await editUserProfileService(
+      userId,
+      fullName,
+      age,
+      phoneNumber
+    );
+    if (!result.success) {
+      res.status(409).json({ message: result.message });
+      return;
+    }
+    res
+      .status(200)
+      .json({ message: result.message, data: result.profileUpdate });
   } catch (err) {
     res.status(500).json({ message: "Internal server error", error: err });
   }

@@ -3,6 +3,7 @@ import {
   allAppointmentsController,
   bookAppointmentController,
   deleteAppointmentController,
+  editUserProfileController,
   updateAppointmentController,
 } from "../controllers/userControllers";
 import { verifyToken } from "../middlewares/authMiddleware";
@@ -23,10 +24,13 @@ router.delete(
 );
 
 //Update appointment route
-router.put(
+router.patch(
   "/appointments/appointmentId/:appointmentId",
   verifyToken,
   updateAppointmentController
 );
+
+//Edit user profile
+router.patch("/profile-update", verifyToken, editUserProfileController);
 
 export default router;
