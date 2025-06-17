@@ -45,3 +45,44 @@ export const userRegistration = async (
     throw new Error("Failed to register user");
   }
 };
+
+export const userLoginService = async (
+  phoneNumber: number,
+  password: string
+) => {
+  try {
+    const existingUser = await User.findOne({ phoneNumber });
+    if (!existingUser) {
+      return {
+        success: false,
+        message: "User not found, please register",
+      };
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
+
+    if (!isPasswordValid) {
+      return {
+        success: false,
+        message: "Invalid credentials",
+      };
+    }
+
+    return {
+      success: true,
+      message: "login successful",
+      data: {
+        _id: existingUser._id,
+        fullName: existingUser.fullName,
+        age: existingUser.age,
+        role: existingUser.role,
+      },
+    };
+  } catch (err) {
+    console.error("Login service error", err);
+    throw new Error("Login failed due to server error");
+  }
+};

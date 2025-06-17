@@ -1,10 +1,10 @@
 import mongoose, { Document } from "mongoose";
 
 export interface UserInterface extends Document {
-  fullName: String;
-  age: Number;
-  phoneNumber: Number;
-  password: String;
+  fullName: string;
+  age: number;
+  phoneNumber: number;
+  password: string;
   role?: "user";
 }
 
