@@ -9,9 +9,9 @@ import { verifyToken } from "../middlewares/authMiddleware";
 
 const router = Router();
 
-//User registration
+//User registration (all can access)
 router.post("/user-register", signupController);
-//User login
+//User login (all can access)
 router.post("/user-login", userLoginController);
 //Doctor registration (admin access only)
 router.post("/doctor-register", verifyToken, doctorRegisterController);
