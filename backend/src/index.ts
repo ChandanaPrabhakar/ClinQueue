@@ -1,6 +1,7 @@
 import express, { json } from "express";
 import dotenv from "dotenv";
 import { dbconnection } from "./config/db";
+import authRouter from "./routes/authRoutes";
 
 dotenv.config();
 dbconnection();
@@ -8,6 +9,7 @@ dbconnection();
 const app = express();
 
 app.use(express.json());
+app.use("/api/auth", authRouter);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
