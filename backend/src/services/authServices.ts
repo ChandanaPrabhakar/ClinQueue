@@ -147,3 +147,45 @@ export const doctorRegisterService = async (
     throw new Error("Failed to register doctor");
   }
 };
+
+//Doctor login service
+export const doctorLoginService = async (email: string, password: string) => {
+  try {
+    const existingDoctor: DoctorInterface | null = await Doctor.findOne({
+      email,
+    });
+    if (!existingDoctor) {
+      return {
+        success: false,
+        message: "Doctor not found, please check with admin and register",
+      };
+    }
+    const isPasswordValid: boolean = await bcrypt.compare(
+      password,
+      existingDoctor.password
+    );
+    if (!isPasswordValid) {
+      return {
+        success: false,
+        message: "Invalid credentials",
+      };
+    }
+
+    return {
+      success: true,
+      message: "Login successful",
+      data: {
+        _id: existingDoctor._id,
+        doctorName: existingDoctor.doctorName,
+        specialization: existingDoctor.specialization,
+        qualification: existingDoctor.qualification,
+        experience: existingDoctor.experience,
+        role: existingDoctor.role,
+        availableSlots: existingDoctor.availableSlots,
+      },
+    };
+  } catch (err) {
+    console.error("Error doctor logging in", err);
+    throw new Error("Failed to login the doctor");
+  }
+};
