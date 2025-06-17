@@ -64,7 +64,6 @@ export const allAppointmentsService = async (id: string) => {
     const bookedAppointments: AppointmentInterface[] | null =
       await Appointment.find({ userId: id });
 
-    console.log(bookedAppointments);
     if (!bookedAppointments) {
       return {
         success: false,
@@ -89,10 +88,11 @@ export const deleteAppointmentService = async (
   appointmentId: string
 ) => {
   try {
-    const appointment = await Appointment.findOneAndDelete({
-      _id: appointmentId,
-      userId: userId,
-    });
+    const appointment: AppointmentInterface | null =
+      await Appointment.findOneAndDelete({
+        _id: appointmentId,
+        userId: userId,
+      });
     if (appointment) {
       return {
         success: true,
@@ -107,5 +107,35 @@ export const deleteAppointmentService = async (
   } catch (err) {
     console.error("Error deleting the appointment");
     throw new Error("Failed to delete appointment");
+  }
+};
+
+//Update appointment service
+export const updateAppointmentService = async (
+  userId: string,
+  appointmentId: string,
+  timeSlot: string
+) => {
+  try {
+    const updateAppointment: AppointmentInterface | null =
+      await Appointment.findOneAndUpdate(
+        { _id: appointmentId, userId: userId },
+        { $set: { timeSlot: timeSlot } },
+        { new: true }
+      );
+    if (!updateAppointment) {
+      return {
+        success: false,
+        message: "Appointment not found",
+      };
+    }
+    return {
+      success: true,
+      message: "appointment updated successfully",
+      updateAppointment,
+    };
+  } catch (err) {
+    console.error("Error updating the appointment");
+    throw new Error("Failed to update appointment");
   }
 };

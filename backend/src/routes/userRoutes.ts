@@ -3,6 +3,7 @@ import {
   allAppointmentsController,
   bookAppointmentController,
   deleteAppointmentController,
+  updateAppointmentController,
 } from "../controllers/userControllers";
 import { verifyToken } from "../middlewares/authMiddleware";
 
@@ -19,6 +20,13 @@ router.delete(
   "/appointments/appointmentId/:appointmentId",
   verifyToken,
   deleteAppointmentController
+);
+
+//Update appointment route
+router.put(
+  "/appointments/appointmentId/:appointmentId",
+  verifyToken,
+  updateAppointmentController
 );
 
 export default router;
