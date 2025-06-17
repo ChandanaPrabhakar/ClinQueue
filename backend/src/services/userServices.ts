@@ -139,3 +139,65 @@ export const updateAppointmentService = async (
     throw new Error("Failed to update appointment");
   }
 };
+
+//Edit user profile service
+export const editUserProfileService = async (
+  userId: string,
+  fullName: string,
+  age: number,
+  phoneNumber: number
+) => {
+  try {
+    const user: UserInterface | null = await User.findById(userId);
+    const updates: Partial<{
+      fullName: string;
+      age: number;
+      phoneNumber: number;
+    }> = {};
+
+    if (fullName && fullName !== user?.fullName) {
+      updates.fullName = fullName;
+    }
+
+    if (age && age !== user?.age) {
+      updates.age = age;
+    }
+    if (phoneNumber && phoneNumber !== user?.phoneNumber) {
+      const existingPhoneUser = await User.findOne({
+        phoneNumber,
+        _id: { $ne: userId },
+      });
+
+      if (existingPhoneUser) {
+        return {
+          success: false,
+          message:
+            "Phone number already exists. Please use a different number.",
+        };
+      }
+      updates.phoneNumber = phoneNumber;
+    }
+
+    if (Object.keys(updates).length === 0) {
+      return {
+        success: false,
+        message: "No changes detected to update",
+      };
+    }
+
+    const profileUpdate = await User.findByIdAndUpdate(
+      userId,
+      { $set: updates },
+      { new: true }
+    );
+
+    return {
+      success: true,
+      message: "profile updated successfully",
+      profileUpdate,
+    };
+  } catch (err) {
+    console.error("Error updating profile", err);
+    throw new Error("Failed to update profile");
+  }
+};
