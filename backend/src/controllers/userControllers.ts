@@ -3,6 +3,7 @@ import {
   allAppointmentsService,
   bookAppointmentService,
   deleteAppointmentService,
+  updateAppointmentService,
 } from "../services/userServices";
 import { CustomRequest } from "../types/customRequest";
 
@@ -58,6 +59,34 @@ export const deleteAppointmentController = async (
       res.status(404).json({ message: result.message });
     }
     res.status(200).json({ message: result.message });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error", error: err });
+  }
+};
+
+//Update appointment controller
+export const updateAppointmentController = async (
+  req: CustomRequest,
+  res: Response
+) => {
+  const userId = req.user?.id as string;
+  const { appointmentId } = req.params;
+  const { timeSlot } = req.body;
+  if (!timeSlot) {
+    res.status(400).json({ message: "No changes provided" });
+  }
+  try {
+    const result = await updateAppointmentService(
+      userId,
+      appointmentId,
+      timeSlot
+    );
+    if (!result.success) {
+      res.status(404).json({ message: result.message });
+    }
+    res
+      .status(200)
+      .json({ message: result.message, data: result.updateAppointment });
   } catch (err) {
     res.status(500).json({ message: "Internal server error", error: err });
   }
