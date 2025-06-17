@@ -7,6 +7,7 @@ export interface AppointmentInterface extends Document {
   doctorName: string;
   doctorSpec: string;
   timeSlot: string;
+  userId: string;
 }
 
 const AppointmentSchema = new mongoose.Schema(
@@ -32,6 +33,10 @@ const AppointmentSchema = new mongoose.Schema(
       required: true,
     },
     timeSlot: {
+      type: String,
+      required: true,
+    },
+    userId: {
       type: String,
       required: true,
     },
