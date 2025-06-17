@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import {
   allAppointmentsService,
   bookAppointmentService,
+  deleteAppointmentService,
 } from "../services/userServices";
 import { CustomRequest } from "../types/customRequest";
 
@@ -39,6 +40,24 @@ export const allAppointmentsController = async (
     res
       .status(200)
       .json({ message: result.message, data: result.bookedAppointments });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error", error: err });
+  }
+};
+
+//Delete appointment controller
+export const deleteAppointmentController = async (
+  req: CustomRequest,
+  res: Response
+) => {
+  const userId = req.user?.id as string;
+  const { appointmentId } = req.params;
+  try {
+    const result = await deleteAppointmentService(userId, appointmentId);
+    if (!result.success) {
+      res.status(404).json({ message: result.message });
+    }
+    res.status(200).json({ message: result.message });
   } catch (err) {
     res.status(500).json({ message: "Internal server error", error: err });
   }
