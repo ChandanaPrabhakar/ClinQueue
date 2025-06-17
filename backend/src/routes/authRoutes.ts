@@ -5,6 +5,7 @@ import {
   signupController,
   userLoginController,
 } from "../controllers/authControllers";
+import { verifyToken } from "../middlewares/authMiddleware";
 
 const router = Router();
 
@@ -13,7 +14,7 @@ router.post("/user-register", signupController);
 //User login
 router.post("/user-login", userLoginController);
 //Doctor registration (admin access only)
-router.post("/doctor-register", doctorRegisterController);
+router.post("/doctor-register", verifyToken, doctorRegisterController);
 //Doctor login (admin and doctor access)
 router.post("/doctor-login", doctorLoginController);
 

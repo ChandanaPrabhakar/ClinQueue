@@ -1,6 +1,7 @@
 import Doctor, { DoctorInterface } from "../models/doctorModel";
 import User, { UserInterface } from "../models/userModel";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 //User registration service
 export const userRegistration = async (
@@ -31,6 +32,12 @@ export const userRegistration = async (
 
     const savedData: UserInterface = await userData.save();
 
+    const token = jwt.sign(
+      { id: savedData._id, role: savedData.role },
+      process.env.JWT_SECRET as string,
+      { expiresIn: "30m" }
+    );
+
     return {
       success: true,
       message: "User registered successfully",
@@ -41,6 +48,7 @@ export const userRegistration = async (
         phoneNumber: savedData.phoneNumber,
         role: savedData.role,
       },
+      token,
     };
   } catch (err) {
     console.error("Error in userRegistration service:", err);
@@ -76,6 +84,12 @@ export const userLoginService = async (
       };
     }
 
+    const token = jwt.sign(
+      { id: existingUser._id, role: existingUser.role },
+      process.env.JWT_SECRET as string,
+      { expiresIn: "30m" }
+    );
+
     return {
       success: true,
       message: "login successful",
@@ -85,6 +99,7 @@ export const userLoginService = async (
         age: existingUser.age,
         role: existingUser.role,
       },
+      token,
     };
   } catch (err) {
     console.error("Login service error", err);
@@ -171,6 +186,12 @@ export const doctorLoginService = async (email: string, password: string) => {
       };
     }
 
+    const token = jwt.sign(
+      { id: existingDoctor._id, role: existingDoctor.role },
+      process.env.JWT_SECRET as string,
+      { expiresIn: "30m" }
+    );
+
     return {
       success: true,
       message: "Login successful",
@@ -183,6 +204,7 @@ export const doctorLoginService = async (email: string, password: string) => {
         role: existingDoctor.role,
         availableSlots: existingDoctor.availableSlots,
       },
+      token,
     };
   } catch (err) {
     console.error("Error doctor logging in", err);
