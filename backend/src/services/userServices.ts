@@ -82,3 +82,30 @@ export const allAppointmentsService = async (id: string) => {
     throw new Error("Failed to get all appointments");
   }
 };
+
+//Delete appointment service
+export const deleteAppointmentService = async (
+  userId: string,
+  appointmentId: string
+) => {
+  try {
+    const appointment = await Appointment.findOneAndDelete({
+      _id: appointmentId,
+      userId: userId,
+    });
+    if (appointment) {
+      return {
+        success: true,
+        message: "appointment deleted successfully",
+      };
+    } else {
+      return {
+        success: false,
+        message: "appointment not found",
+      };
+    }
+  } catch (err) {
+    console.error("Error deleting the appointment");
+    throw new Error("Failed to delete appointment");
+  }
+};
