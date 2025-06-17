@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
-import { userLoginService, userRegistration } from "../services/authServices";
+import {
+  doctorRegisterService,
+  userLoginService,
+  userRegistration,
+} from "../services/authServices";
 
+// User registration controller
 export const signupController = async (req: Request, res: Response) => {
   const { fullName, age, phoneNumber, password, role } = req.body;
   try {
@@ -21,6 +26,7 @@ export const signupController = async (req: Request, res: Response) => {
   }
 };
 
+//User login controller
 export const userLoginController = async (req: Request, res: Response) => {
   try {
     const { phoneNumber, password } = req.body;
@@ -32,6 +38,39 @@ export const userLoginController = async (req: Request, res: Response) => {
 
     res.status(200).json({ message: result.message, user: result.data });
   } catch (err) {
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Internal server error", error: err });
+  }
+};
+
+//Doctor registration controller
+export const doctorRegisterController = async (req: Request, res: Response) => {
+  try {
+    const {
+      doctorName,
+      email,
+      specialization,
+      qualification,
+      experience,
+      password,
+      role,
+      availableSlots,
+    } = req.body;
+    const result = await doctorRegisterService(
+      doctorName,
+      email,
+      specialization,
+      qualification,
+      experience,
+      password,
+      role,
+      availableSlots
+    );
+    if (!result.success) {
+      res.status(400).json({ message: result.message });
+    }
+
+    res.status(200).json({ message: result.message, doctor: result.data });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error", error: err });
   }
 };
