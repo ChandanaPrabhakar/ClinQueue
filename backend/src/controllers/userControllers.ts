@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
-import { bookAppointmentService } from "../services/userServices";
+import {
+  allAppointmentsService,
+  bookAppointmentService,
+} from "../services/userServices";
 import { CustomRequest } from "../types/customRequest";
 
+//Book-appointment controller
 export const bookAppointmentController = async (
   req: CustomRequest,
   res: Response
@@ -16,6 +20,25 @@ export const bookAppointmentController = async (
     res
       .status(201)
       .json({ message: result.message, data: result.saveAppointment });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error", error: err });
+  }
+};
+
+//Get all appointments controller
+export const allAppointmentsController = async (
+  req: CustomRequest,
+  res: Response
+) => {
+  const id = req.user?.id as string;
+  try {
+    const result = await allAppointmentsService(id);
+    if (!result.success) {
+      res.status(404).json({ message: result.message });
+    }
+    res
+      .status(200)
+      .json({ message: result.message, data: result.bookedAppointments });
   } catch (err) {
     res.status(500).json({ message: "Internal server error", error: err });
   }
