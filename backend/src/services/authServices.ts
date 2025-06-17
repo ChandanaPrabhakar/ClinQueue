@@ -1,6 +1,8 @@
+import Doctor, { DoctorInterface } from "../models/doctorModel";
 import User, { UserInterface } from "../models/userModel";
 import bcrypt from "bcrypt";
 
+//User registration service
 export const userRegistration = async (
   fullName: string,
   age: number,
@@ -46,6 +48,7 @@ export const userRegistration = async (
   }
 };
 
+//User login service
 export const userLoginService = async (
   phoneNumber: number,
   password: string
@@ -86,5 +89,61 @@ export const userLoginService = async (
   } catch (err) {
     console.error("Login service error", err);
     throw new Error("Login failed due to server error");
+  }
+};
+
+//Doctor registration service
+export const doctorRegisterService = async (
+  doctorName: string,
+  email: string,
+  specialization: string,
+  qualification: string,
+  experience: number,
+  password: string,
+  role: string,
+  availableSlots: string[]
+) => {
+  try {
+    const existingDoctor: DoctorInterface | null = await Doctor.findOne({
+      email,
+    });
+    if (existingDoctor) {
+      return {
+        success: false,
+        message: "Doctor already exists, please login",
+      };
+    }
+
+    const hashedPassword: string = await bcrypt.hash(password, 10);
+
+    const doctorData: DoctorInterface = new Doctor({
+      doctorName,
+      email,
+      specialization,
+      qualification,
+      experience,
+      password: hashedPassword,
+      role,
+      availableSlots,
+    });
+
+    const savedData = await doctorData.save();
+
+    return {
+      success: true,
+      message: "Doctor registered successfully",
+      data: {
+        _id: savedData._id,
+        doctorName,
+        specialization,
+        qualification,
+        experience,
+        role,
+        availableSlots,
+      },
+    };
+  } catch (err) {
+    console.error("Error registering doctor", err);
+    throw new Error("Failed to register doctor");
   }
 };
