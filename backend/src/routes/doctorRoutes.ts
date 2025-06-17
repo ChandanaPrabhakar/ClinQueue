@@ -2,6 +2,7 @@ import { Router } from "express";
 import { verifyToken } from "../middlewares/authMiddleware";
 import { authorizeVerify } from "../middlewares/roleMiddleware";
 import { editAvailableSlotsController } from "../controllers/doctorControllers";
+import { allAppointmentsController } from "../controllers/doctorControllers";
 
 const router = Router();
 
@@ -11,6 +12,14 @@ router.patch(
   verifyToken,
   authorizeVerify("doctor", "admin"),
   editAvailableSlotsController
+);
+
+//get all appointments
+router.get(
+  "/appointments",
+  verifyToken,
+  authorizeVerify("doctor", "admin"),
+  allAppointmentsController
 );
 
 export default router;
