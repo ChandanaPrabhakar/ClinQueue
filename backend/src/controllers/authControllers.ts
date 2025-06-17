@@ -5,6 +5,8 @@ import {
   userLoginService,
   userRegistration,
 } from "../services/authServices";
+import jwt from "jsonwebtoken";
+import { CustomRequest } from "../types/customRequest";
 
 // User registration controller
 export const signupController = async (req: Request, res: Response) => {
@@ -21,7 +23,11 @@ export const signupController = async (req: Request, res: Response) => {
     if (!result.success) {
       res.status(400).json({ message: result.message });
     }
-    res.status(201).json({ message: result.message, user: result.data });
+    res.status(201).json({
+      message: result.message,
+      user: result.data,
+      token: result.token,
+    });
   } catch (err) {
     res.status(500).json({ message: "Internal server error", error: err });
   }
@@ -37,7 +43,11 @@ export const userLoginController = async (req: Request, res: Response) => {
       res.status(404).json({ message: result.message });
     }
 
-    res.status(200).json({ message: result.message, user: result.data });
+    res.status(200).json({
+      message: result.message,
+      user: result.data,
+      token: result.token,
+    });
   } catch (err) {
     res.status(500).json({ message: "Internal server error", error: err });
   }
@@ -45,6 +55,7 @@ export const userLoginController = async (req: Request, res: Response) => {
 
 //Doctor registration controller
 export const doctorRegisterController = async (req: Request, res: Response) => {
+  const user = (req as CustomRequest).user;
   try {
     const {
       doctorName,
@@ -84,7 +95,11 @@ export const doctorLoginController = async (req: Request, res: Response) => {
     if (!result.success) {
       res.status(404).json({ message: result.message });
     }
-    res.status(200).json({ message: result.message, doctor: result.data });
+    res.status(200).json({
+      message: result.message,
+      doctor: result.data,
+      token: result.token,
+    });
   } catch (err) {
     res.status(500).json({ message: "Internal server error", error: err });
   }
