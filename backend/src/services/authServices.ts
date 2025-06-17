@@ -51,7 +51,9 @@ export const userLoginService = async (
   password: string
 ) => {
   try {
-    const existingUser = await User.findOne({ phoneNumber });
+    const existingUser: UserInterface | null = await User.findOne({
+      phoneNumber,
+    });
     if (!existingUser) {
       return {
         success: false,
@@ -59,7 +61,7 @@ export const userLoginService = async (
       };
     }
 
-    const isPasswordValid = await bcrypt.compare(
+    const isPasswordValid: boolean = await bcrypt.compare(
       password,
       existingUser.password
     );
