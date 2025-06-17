@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import {
+  doctorLoginService,
   doctorRegisterService,
   userLoginService,
   userRegistration,
@@ -69,6 +70,20 @@ export const doctorRegisterController = async (req: Request, res: Response) => {
       res.status(400).json({ message: result.message });
     }
 
+    res.status(200).json({ message: result.message, doctor: result.data });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error", error: err });
+  }
+};
+
+//Doctor login controller
+export const doctorLoginController = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+    const result = await doctorLoginService(email, password);
+    if (!result.success) {
+      res.status(404).json({ message: result.message });
+    }
     res.status(200).json({ message: result.message, doctor: result.data });
   } catch (err) {
     res.status(500).json({ message: "Internal server error", error: err });
