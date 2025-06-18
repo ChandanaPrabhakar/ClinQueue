@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poetsen+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caprasimo&family=Poetsen+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 
 @theme{
@@ -6,6 +6,7 @@
   --color-secondary: #6D466B;
   --color-bg-primary: #EAD7D7;
   --color-bg-secondary: #B49FCC;
+  --font-logo: "Caprasimo", "sans-serif";
 }
 
 @layer base {
@@ -18,3 +19,9 @@
       overflow-x: hidden;
     }
   }
+
+@layer components {
+  .btn-login{
+    @apply bg-primary w-full px-3 py-2 rounded-full text-bg-primary font-bold cursor-pointer mt-4
+  }
+}
