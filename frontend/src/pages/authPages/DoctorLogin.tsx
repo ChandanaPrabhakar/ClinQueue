@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/api";
 import { motion } from "framer-motion";
 import BackgroundAnime from "../../components/BackgroundAnime";
-import { LuStethoscope } from "react-icons/lu";
 import PasswordInput from "../../components/PasswordInput";
 import { validateEmail } from "../../utils/helper";
+import React from "react";
+import Logo from "../../components/Logo";
 
 const DoctorLogin = () => {
   const [email, setEmail] = useState<string>("");
@@ -35,8 +36,8 @@ const DoctorLogin = () => {
         password,
       });
 
-      if (response.data?.token) {
-        localStorage.setItem("token", response.token);
+      if (response?.data?.token) {
+        localStorage.setItem("token", response?.data?.token);
         navigate("/home");
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -49,10 +50,7 @@ const DoctorLogin = () => {
   };
   return (
     <div className="bg-bg-primary min-h-screen flex items-center justify-center relative">
-      <div className="flex font-logo text-4xl absolute top-5 left-5 gap-2">
-        <LuStethoscope />
-        <h1>ClinQueue</h1>
-      </div>
+      <Logo />
       <BackgroundAnime />
       <form
         onSubmit={handleLogin}

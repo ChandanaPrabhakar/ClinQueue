@@ -12,6 +12,7 @@ import {
 import { FaTooth } from "react-icons/fa";
 import { GiSkeleton } from "react-icons/gi";
 import { MdPregnantWoman } from "react-icons/md";
+import React from "react";
 const medicalIcons = [
   <LuStethoscope />,
   <LuHeartPulse />,
@@ -27,7 +28,7 @@ const medicalIcons = [
 ];
 
 const duplicatedIcons = medicalIcons.flatMap((icon) => {
-  const numCopies = Math.floor(Math.random() * 5) + 1; // Random 1-5 copies
+  const numCopies = Math.floor(Math.random() * 10) + 1; // Random 1-5 copies
   return Array(numCopies).fill(icon);
 });
 const BackgroundAnime = () => {
@@ -35,7 +36,7 @@ const BackgroundAnime = () => {
     <div>
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
         {duplicatedIcons.map((icon, index) => {
-          const startX = 10 + Math.random() * 80; // 10%-90% of container
+          const startX = 0 + Math.random() * 100; // 10%-90% of container
           const startY = 10 + Math.random() * 80;
 
           const moveX = (Math.random() - 0.5) * 500; // -20% to +20% movement

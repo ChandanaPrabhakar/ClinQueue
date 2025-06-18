@@ -1,14 +1,15 @@
-import { useState, type FormEvent } from "react";
+import React, { FormEvent, useState } from "react";
+import Logo from "../../components/Logo";
+import BackgroundAnime from "../../components/BackgroundAnime";
+import { motion } from "framer-motion";
+import PasswordInput from "../../components/PasswordInput";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/api";
-import { motion } from "framer-motion";
-import BackgroundAnime from "../../components/BackgroundAnime";
-import PasswordInput from "../../components/PasswordInput";
-import React from "react";
-import Logo from "../../components/Logo";
 
-const UserLogin = () => {
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
+const UserRegistration = () => {
+  const [fullName, setFullName] = useState<string>("");
+  const [age, setAge] = useState<number>();
+  const [phoneNumber, setPhoneNumber] = useState<number>();
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
 
@@ -17,8 +18,18 @@ const UserLogin = () => {
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
 
+    if (!fullName) {
+      setError("Please enter full name");
+      return;
+    }
+
+    if (!age) {
+      setError("Please enter age");
+      return;
+    }
+
     if (!phoneNumber) {
-      setError("Please enter valid phone number");
+      setError("Please enter valid email");
       return;
     }
 
@@ -30,36 +41,27 @@ const UserLogin = () => {
     setError(null);
 
     try {
-      const response = await axiosInstance.post("/auth/user-login", {
+      const response = await axiosInstance.post("/auth/user-register", {
+        fullName,
+        age,
         phoneNumber,
         password,
       });
 
-      console.log(response?.data?.message);
-
       if (response?.data?.token) {
-        localStorage.setItem("token", response.data?.token);
+        localStorage.setItem("token", response?.data?.token);
         navigate("/home");
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       setError(
-        error.response?.data?.message ??
+        error.response.message ??
           "An unexpected error occurred. Please try again later."
       );
     }
   };
-
   return (
     <div className="bg-bg-primary min-h-screen flex items-center justify-center relative">
-      <div className="absolute top-7.5 right-10 font-bold text-primary text-lg">
-        <p>
-          Are you a Doctor?{""}{" "}
-          <Link to={"/doctor-login"} className="underline">
-            Login
-          </Link>
-        </p>
-      </div>
       <Logo />
       <BackgroundAnime />
       <form
@@ -67,19 +69,47 @@ const UserLogin = () => {
         className="w-95 rounded-4xl border border-primary bg-white px-7 py-10 shadow-2xl"
       >
         <h2 className="text-xl font-semibold mb-6 text-center text-primary">
-          User Login
+          User Registration
         </h2>
 
         {error && <div className="text-red-600 text-sm mb-4">{error}</div>}
 
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1 text-secondary">
-            Phone Number
+            Full Name
           </label>
           <input
             type="text"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            className="w-full border rounded-2xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+            placeholder="Enter Full Name"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-1 text-secondary">
+            Age
+          </label>
+          <input
+            type="text"
+            value={age}
+            onChange={(e) => setAge(Number(e.target.value))}
+            className="w-full border rounded-2xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+            placeholder="Enter Age"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-1 text-secondary">
+            Phone Number
+          </label>
+          <input
+            type="tel"
             value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
+            onChange={(e) => setPhoneNumber(Number(e.target.value))}
+            pattern="[0-9]*"
+            inputMode="numeric"
             className="w-full border rounded-2xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
             placeholder="Enter phone number"
           />
@@ -94,7 +124,6 @@ const UserLogin = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-
         <motion.button
           initial={{ scale: 1 }}
           animate={{ scale: 1 }}
@@ -102,16 +131,16 @@ const UserLogin = () => {
             scale: 1.1,
             transition: { duration: 0.2 },
           }}
-          transition={{ duration: 0.5 }} // For initial and animate transitions
+          transition={{ duration: 0.5 }}
           type="submit"
           className="btn-login"
         >
           Login
         </motion.button>
         <p className="text-center my-5">
-          Not Registered Yet? {""}
-          <Link to={"/user-registration"} className="underline text-primary">
-            Create an Account
+          Already have an account? {""}
+          <Link to={"/user-login"} className="underline text-primary">
+            Login
           </Link>
         </p>
       </form>
@@ -119,4 +148,4 @@ const UserLogin = () => {
   );
 };
 
-export default UserLogin;
+export default UserRegistration;
