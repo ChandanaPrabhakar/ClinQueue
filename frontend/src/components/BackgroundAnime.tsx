@@ -12,7 +12,7 @@ import {
 import { FaTooth } from "react-icons/fa";
 import { GiSkeleton } from "react-icons/gi";
 import { MdPregnantWoman } from "react-icons/md";
-import React from "react";
+import React, { useMemo } from "react";
 const medicalIcons = [
   <LuStethoscope />,
   <LuHeartPulse />,
@@ -27,24 +27,27 @@ const medicalIcons = [
   <MdPregnantWoman />,
 ];
 
-const duplicatedIcons = medicalIcons.flatMap((icon) => {
-  const numCopies = Math.floor(Math.random() * 10) + 1; // Random 1-5 copies
-  return Array(numCopies).fill(icon);
-});
 const BackgroundAnime = () => {
+  const duplicatedIcons = useMemo(() => {
+    return medicalIcons.flatMap((icon) => {
+      const numCopies = Math.floor(Math.random() * 10) + 1;
+      return Array.from({ length: numCopies }, () => ({
+        icon,
+        startX: Math.random() * 100,
+        startY: Math.random() * 80,
+        moveX: (Math.random() - 0.5) * 500,
+        moveY: (Math.random() - 0.5) * 500,
+        duration: 30 + Math.random(),
+        delay: Math.random(),
+        size: 1 + Math.random() * 2,
+      }));
+    });
+  }, []);
+
   return (
     <div>
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        {duplicatedIcons.map((icon, index) => {
-          const startX = 0 + Math.random() * 100; // 10%-90% of container
-          const startY = 10 + Math.random() * 80;
-
-          const moveX = (Math.random() - 0.5) * 500; // -20% to +20% movement
-          const moveY = (Math.random() - 0.5) * 500;
-
-          const duration = 30 + Math.random() * 1; // 30-60 seconds
-          const delay = Math.random() * 1; // Staggered start
-
+        {duplicatedIcons.map((item, index) => {
           return (
             <motion.div
               key={index}
@@ -54,32 +57,32 @@ const BackgroundAnime = () => {
                 y: 0,
               }}
               animate={{
-                x: moveX,
-                y: moveY,
+                x: item.moveX,
+                y: item.moveY,
               }}
               transition={{
                 x: {
-                  duration: duration,
+                  duration: item.duration,
                   repeat: Infinity,
                   repeatType: "reverse",
                   ease: "easeInOut",
                 },
                 y: {
-                  duration: duration * 0.25, // Different timing for Y axis
+                  duration: item.duration * 0.25, // Different timing for Y axis
                   repeat: Infinity,
                   repeatType: "reverse",
                   ease: "easeInOut",
                 },
-                delay: delay,
+                delay: item.delay,
               }}
               className="absolute text-primary opacity-10"
               style={{
-                fontSize: `${1 + Math.random() * 2}rem`, // 1-3rem size
-                left: `${startX}%`,
-                top: `${startY}%`,
+                fontSize: `${item.size}rem`, // 1-3rem size
+                left: `${item.startX}%`,
+                top: `${item.startY}%`,
               }}
             >
-              {icon}
+              {item.icon}
             </motion.div>
           );
         })}
