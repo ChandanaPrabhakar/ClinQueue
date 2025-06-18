@@ -64,7 +64,7 @@ const UserLogin = () => {
       <BackgroundAnime />
       <form
         onSubmit={handleLogin}
-        className="w-95 rounded-4xl border border-primary bg-white px-7 py-10 shadow-2xl"
+        className="w-95 rounded-4xl border border-primary bg-white backdrop-blur px-7 py-10 shadow-2xl"
       >
         <h2 className="text-xl font-semibold mb-6 text-center text-primary">
           User Login
