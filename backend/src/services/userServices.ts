@@ -2,6 +2,32 @@ import Appointment, { AppointmentInterface } from "../models/appointmentModel";
 import Doctor, { DoctorInterface } from "../models/doctorModel";
 import User, { UserInterface } from "../models/userModel";
 
+//Get user info service
+export const getUserInfoService = async (userId: string) => {
+  try {
+    const userData: UserInterface | null = await User.findById({ _id: userId });
+    if (!userData) {
+      return {
+        success: false,
+        message: "User not found",
+      };
+    }
+    return {
+      success: true,
+      message: "user details sent",
+      userInfo: {
+        fullName: userData?.fullName,
+        age: userData?.age,
+        phoneNumber: userData?.phoneNumber,
+        role: userData?.role,
+      },
+    };
+  } catch (err) {
+    console.error("Error fetching user information");
+    throw new Error("Failed to fetch user info");
+  }
+};
+
 //Book-appointment service
 export const bookAppointmentService = async (
   id: string,
