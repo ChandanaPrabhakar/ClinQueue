@@ -40,18 +40,16 @@ export const userLoginController = async (req: Request, res: Response) => {
     const result = await userLoginService(phoneNumber, password);
 
     if (!result.success) {
-      return res.status(404).json({ message: result.message });
+      res.status(404).json({ message: result.message });
     }
 
-    return res.status(200).json({
+    res.status(200).json({
       message: result.message,
       user: result.data,
       token: result.token,
     });
   } catch (err) {
-    return res
-      .status(500)
-      .json({ message: "Internal server error", error: err });
+    res.status(500).json({ message: "Internal server error", error: err });
   }
 };
 
@@ -83,11 +81,14 @@ export const doctorRegisterController = async (req: Request, res: Response) => {
     );
     if (!result.success) {
       res.status(400).json({ message: result.message });
+      return;
     }
 
     res.status(200).json({ message: result.message, doctor: result.data });
+    return;
   } catch (err) {
     res.status(500).json({ message: "Internal server error", error: err });
+    return;
   }
 };
 
@@ -98,13 +99,16 @@ export const doctorLoginController = async (req: Request, res: Response) => {
     const result = await doctorLoginService(email, password);
     if (!result.success) {
       res.status(404).json({ message: result.message });
+      return;
     }
     res.status(200).json({
       message: result.message,
       doctor: result.data,
       token: result.token,
     });
+    return;
   } catch (err) {
     res.status(500).json({ message: "Internal server error", error: err });
+    return;
   }
 };

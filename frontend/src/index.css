@@ -22,6 +22,6 @@
 
 @layer components {
   .btn-login{
-    @apply bg-primary w-full px-3 py-2 rounded-full text-bg-primary font-bold cursor-pointer mt-4
+    @apply bg-primary w-full px-3 py-2 rounded-full text-bg-primary font-bold cursor-pointer
   }
 }
