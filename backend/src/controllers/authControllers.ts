@@ -25,7 +25,6 @@ export const signupController = async (req: Request, res: Response) => {
     }
     res.status(201).json({
       message: result.message,
-      user: result.data,
       token: result.token,
     });
   } catch (err) {
@@ -45,7 +44,6 @@ export const userLoginController = async (req: Request, res: Response) => {
 
     res.status(200).json({
       message: result.message,
-      user: result.data,
       token: result.token,
     });
   } catch (err) {
@@ -84,7 +82,7 @@ export const doctorRegisterController = async (req: Request, res: Response) => {
       return;
     }
 
-    res.status(200).json({ message: result.message, doctor: result.data });
+    res.status(200).json({ message: result.message });
     return;
   } catch (err) {
     res.status(500).json({ message: "Internal server error", error: err });
@@ -103,7 +101,6 @@ export const doctorLoginController = async (req: Request, res: Response) => {
     }
     res.status(200).json({
       message: result.message,
-      doctor: result.data,
       token: result.token,
     });
     return;

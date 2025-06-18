@@ -4,9 +4,29 @@ import {
   bookAppointmentService,
   deleteAppointmentService,
   editUserProfileService,
+  getUserInfoService,
   updateAppointmentService,
 } from "../services/userServices";
 import { CustomRequest } from "../types/customRequest";
+
+//Get user into controller
+export const getUserInfoController = async (
+  req: CustomRequest,
+  res: Response
+) => {
+  const userId = req.user?.id as string;
+  try {
+    const result = await getUserInfoService(userId);
+    if (!result.success) {
+      res.status(404).json({ message: result.message });
+      return;
+    }
+    res.status(200).json({ message: result.message, data: result.userInfo });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error", error: err });
+    return;
+  }
+};
 
 //Book-appointment controller
 export const bookAppointmentController = async (

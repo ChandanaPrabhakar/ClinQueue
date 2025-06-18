@@ -41,13 +41,6 @@ export const userRegistration = async (
     return {
       success: true,
       message: "User registered successfully",
-      data: {
-        _id: savedData._id,
-        fullName: savedData.fullName,
-        age: savedData.age,
-        phoneNumber: savedData.phoneNumber,
-        role: savedData.role,
-      },
       token,
     };
   } catch (err) {
@@ -93,12 +86,6 @@ export const userLoginService = async (
     return {
       success: true,
       message: "login successful",
-      data: {
-        _id: existingUser._id,
-        fullName: existingUser.fullName,
-        age: existingUser.age,
-        role: existingUser.role,
-      },
       token,
     };
   } catch (err) {
@@ -147,15 +134,6 @@ export const doctorRegisterService = async (
     return {
       success: true,
       message: "Doctor registered successfully",
-      data: {
-        _id: savedData._id,
-        doctorName,
-        specialization,
-        qualification,
-        experience,
-        role,
-        availableSlots,
-      },
     };
   } catch (err) {
     console.error("Error registering doctor", err);

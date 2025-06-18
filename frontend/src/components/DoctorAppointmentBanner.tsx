@@ -45,10 +45,8 @@ const DoctorAppointmentBanner: React.FC<DoctorAppointmentBannerProps> = ({
       // User is logged in - proceed to booking
       navigate("/book-appointment");
     } else {
-      // User not logged in - redirect to register
-      navigate("/register", { state: { from: "/book-appointment" } });
-      // Optional: Show toast notification
-      // toast.info('Please register or login to book an appointment');
+      // User not logged in - redirect to login
+      navigate("/user-login", { state: { from: "/book-appointment" } });
     }
   };
 
@@ -57,7 +55,7 @@ const DoctorAppointmentBanner: React.FC<DoctorAppointmentBannerProps> = ({
   };
 
   return (
-    <div className="relative bg-gradient-to-r from-indigo-50 to-blue-50 overflow-hidden">
+    <div className="relative border border-primary rounded-2xl bg-transparent backdrop-blur-lg overflow-hidden">
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
@@ -72,15 +70,15 @@ const DoctorAppointmentBanner: React.FC<DoctorAppointmentBannerProps> = ({
             transition={{ duration: 0.8 }}
             className="relative z-10"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-6">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-blue-600">
+            <h1 className="text-4xl md:text-5xl font-bold text-bg-secondary leading-tight mb-6">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
                 Book Your Doctor Appointment
               </span>
               <br />
-              <span className="text-gray-800">In Just a Few Clicks</span>
+              <span className="text-secondary">In Just a Few Clicks</span>
             </h1>
 
-            <p className="text-lg text-gray-600 mb-8 max-w-lg">
+            <p className="text-lg text-primary mb-8 max-w-lg">
               Connect with top healthcare professionals in your area. Our
               platform makes it simple to find, compare, and book appointments
               with the best doctors.
@@ -91,7 +89,7 @@ const DoctorAppointmentBanner: React.FC<DoctorAppointmentBannerProps> = ({
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleBookAppointment}
-                className="px-8 py-3 bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                className="px-8 py-3 bg-primary text-bg-primary text-lg font-bold rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
               >
                 Book Now
               </motion.button>
@@ -100,7 +98,7 @@ const DoctorAppointmentBanner: React.FC<DoctorAppointmentBannerProps> = ({
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleFindDoctor}
-                className="px-8 py-3 bg-white text-indigo-600 font-medium rounded-lg border border-indigo-200 shadow-md hover:shadow-lg transition-all duration-300"
+                className="px-8 py-3 bg-white text-primary font-bold text-lg rounded-3xl border border-primary shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
               >
                 Find a Doctor
               </motion.button>
@@ -115,24 +113,24 @@ const DoctorAppointmentBanner: React.FC<DoctorAppointmentBannerProps> = ({
             className="relative"
           >
             <div className="relative bg-white p-6 rounded-2xl shadow-xl">
-              <div className="absolute -inset-2 bg-gradient-to-r from-indigo-200 to-blue-200 rounded-2xl opacity-75 -z-10 blur-md"></div>
+              <div className="absolute -inset-2 bg-primary to-bg-secondary rounded-2xl opacity-75 -z-10 blur-md"></div>
 
-              <div className="bg-gradient-to-br from-indigo-100 to-blue-50 rounded-xl p-6">
+              <div className="bg-secondary rounded-xl p-6">
                 <div className="flex justify-between items-center mb-6">
                   <div>
-                    <h3 className="font-bold text-gray-800">
+                    <h3 className="font-bold text-bg-primary">
                       Dr. Sarah Johnson
                     </h3>
-                    <p className="text-sm text-gray-600">Cardiologist</p>
+                    <p className="text-sm text-bg-primary">Cardiologist</p>
                   </div>
-                  <div className="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-xs font-semibold">
+                  <div className="bg-bg-primary text-primary px-3 py-1 rounded-full text-xs font-semibold">
                     Available Today
                   </div>
                 </div>
 
                 <div className="flex items-center justify-center mb-6">
                   <div className="relative">
-                    <div className="w-32 h-32 rounded-full bg-indigo-200 flex items-center justify-center overflow-hidden border-4 border-white shadow-md">
+                    <div className="w-32 h-32 rounded-full bg-bg-secondary flex items-center justify-center overflow-hidden border-4 border-white shadow-md">
                       <img
                         src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
                         alt="Doctor"
@@ -147,18 +145,18 @@ const DoctorAppointmentBanner: React.FC<DoctorAppointmentBannerProps> = ({
 
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   <div className="bg-white p-3 rounded-lg shadow-sm text-center">
-                    <p className="text-xs text-gray-500">Experience</p>
-                    <p className="font-bold text-indigo-700">12+ Years</p>
+                    <p className="text-xs text-primary">Experience</p>
+                    <p className="font-bold text-primary">12+ Years</p>
                   </div>
                   <div className="bg-white p-3 rounded-lg shadow-sm text-center">
-                    <p className="text-xs text-gray-500">Rating</p>
-                    <p className="font-bold text-indigo-700">4.9 ★</p>
+                    <p className="text-xs text-primary">Rating</p>
+                    <p className="font-bold text-primary">4.9 ★</p>
                   </div>
                 </div>
 
                 <button
                   onClick={handleBookAppointment}
-                  className="w-full py-2 bg-gradient-to-r from-indigo-500 to-blue-500 text-white rounded-lg font-medium hover:from-indigo-600 hover:to-blue-600 transition-all duration-300"
+                  className="w-full py-2 bg-primary text-bg-primary rounded-3xl text-lg font-bold hover:from-indigo-600 hover:to-blue-600 transition-all duration-300 cursor-pointer"
                 >
                   Book Appointment
                 </button>
@@ -182,10 +180,8 @@ const DoctorAppointmentBanner: React.FC<DoctorAppointmentBannerProps> = ({
             >
               <div className="flex flex-col items-center text-center">
                 <div className="mb-4">{feature.icon}</div>
-                <h3 className="font-bold text-gray-800 mb-1">
-                  {feature.title}
-                </h3>
-                <p className="text-sm text-gray-600">{feature.description}</p>
+                <h3 className="font-bold text-primary mb-1">{feature.title}</h3>
+                <p className="text-sm text-primary">{feature.description}</p>
               </div>
             </motion.div>
           ))}

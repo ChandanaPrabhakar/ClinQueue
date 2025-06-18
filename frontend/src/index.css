@@ -24,4 +24,8 @@
   .btn-login{
     @apply bg-primary w-full px-3 py-2 rounded-full text-bg-primary font-bold cursor-pointer
   }
+
+  .doc-cat{
+    @apply w-25 h-25 rounded-full 
+  }
 }

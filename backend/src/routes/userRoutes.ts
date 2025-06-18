@@ -4,11 +4,15 @@ import {
   bookAppointmentController,
   deleteAppointmentController,
   editUserProfileController,
+  getUserInfoController,
   updateAppointmentController,
 } from "../controllers/userControllers";
 import { verifyToken } from "../middlewares/authMiddleware";
 
 const router = Router();
+
+//Get user info
+router.get("/get-user", verifyToken, getUserInfoController);
 
 //Book-appointment route
 router.post("/book-appointment", verifyToken, bookAppointmentController);
