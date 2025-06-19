@@ -1,6 +1,6 @@
 [build]
   base = "frontend"
-  command = "tsc -p tsconfig.app.json && vite build"
+  command = "tsc -b && vite build"
   publish = "frontend/dist"
 
 [[redirects]]
