@@ -7,15 +7,17 @@ import jwt from "jsonwebtoken";
 export const userRegistration = async (
   fullName: string,
   age: number,
-  phoneNumber: number,
+  phoneNumber: string,
   password: string,
   role: string
 ) => {
   try {
-    const existingUser: number | null = await User.findOne({ phoneNumber });
+    const existingUser: UserInterface | null = await User.findOne({
+      phoneNumber,
+    });
     if (existingUser) {
       return {
-        message: "User already exists, please log in",
+        message: "User Already Exists, Please Log In",
         success: "false",
       };
     }
@@ -40,7 +42,7 @@ export const userRegistration = async (
 
     return {
       success: true,
-      message: "User registered successfully",
+      message: "User Registered Successfully",
       token,
     };
   } catch (err) {
@@ -61,7 +63,7 @@ export const userLoginService = async (
     if (!existingUser) {
       return {
         success: false,
-        message: "User not found, please register",
+        message: "User Not Found, Please Register",
       };
     }
 
@@ -85,7 +87,7 @@ export const userLoginService = async (
 
     return {
       success: true,
-      message: "login successful",
+      message: "Successfully Logged In",
       token,
     };
   } catch (err) {

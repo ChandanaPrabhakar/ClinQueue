@@ -3,7 +3,7 @@ import mongoose, { Document } from "mongoose";
 export interface UserInterface extends Document {
   fullName: string;
   age: number;
-  phoneNumber: number;
+  phoneNumber: string;
   password: string;
   role?: "user";
 }
@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema(
       required: true,
     },
     phoneNumber: {
-      type: Number,
+      type: String,
       required: true,
       unique: true,
     },

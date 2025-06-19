@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import Logo from "../../components/Logo";
 import BackgroundAnime from "../../components/BackgroundAnime";
 import ProfileInfoCard from "../../components/cards/ProfileCard";
@@ -8,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/api";
 import LoginButton from "../../components/LoginButton";
 import LoginModal from "../../components/LoginModal";
+import { motion } from "framer-motion";
 
 interface DoctorInterface {
   _id: string;
@@ -52,6 +54,7 @@ const FindMyDoctor = () => {
     navigate("/home");
     localStorage.clear();
     setUserInfo(null);
+    toast.success("Logged out successfully!");
   };
 
   useEffect(() => {
@@ -66,6 +69,7 @@ const FindMyDoctor = () => {
       } catch (err) {
         setError("Failed to fetch doctors");
         console.error(err);
+        toast.error("Unable to load doctors. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -118,13 +122,23 @@ const FindMyDoctor = () => {
     return <div className="text-center text-red-500 py-12">{error}</div>;
 
   return (
-    <div className="bg-bg-primary min-h-screen flex items-center justify-center relative overflow-y-auto">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="bg-bg-primary min-h-screen flex items-center justify-center relative overflow-y-auto"
+    >
       <Logo />
       <BackgroundAnime />
       {userInfo ? (
         <>
           <Navbar pageName={""} />
-          <ProfileInfoCard fullname={userInfo.fullName} onLogout={onLogout} />
+          <ProfileInfoCard
+            fullname={userInfo.fullName}
+            onLogout={onLogout}
+            age={userInfo.age}
+            phoneNumber={userInfo.phoneNumber}
+          />
         </>
       ) : (
         <LoginButton />
@@ -194,7 +208,7 @@ const FindMyDoctor = () => {
         onClose={() => setShowLoginModal(false)}
         onLoginSuccess={handleLoginSuccess}
       />
-    </div>
+    </motion.div>
   );
 };
 

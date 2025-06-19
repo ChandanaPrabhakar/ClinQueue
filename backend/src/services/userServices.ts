@@ -49,14 +49,14 @@ export const bookAppointmentService = async (
     if (existingAppointments >= 4) {
       return {
         success: false,
-        message: "This slot is fully booked. Please choose another slot.",
+        message: "This Slot is Fully Booked. Please Choose Another Slot.",
       };
     }
 
     if (!userData || !doctorData) {
       return {
         success: false,
-        message: "Slot not available",
+        message: "Slot Not Available",
       };
     }
 
@@ -74,7 +74,7 @@ export const bookAppointmentService = async (
       return {
         success: false,
         message:
-          "Appointment already exists. Check 'My Appointments' and try again.",
+          "Appointment Already Exists. Check 'My Appointments' and Try Again.",
       };
     }
     const appointmentData: AppointmentInterface = new Appointment({
@@ -110,7 +110,7 @@ export const allAppointmentsService = async (id: string) => {
     if (!bookedAppointments) {
       return {
         success: false,
-        message: "No appointments found",
+        message: "No Appointments Found",
       };
     }
 
@@ -121,7 +121,7 @@ export const allAppointmentsService = async (id: string) => {
     };
   } catch (err) {
     console.error("Error fetching appointments");
-    throw new Error("Failed to get all appointments");
+    throw new Error("Failed to load appointments");
   }
 };
 
@@ -139,7 +139,7 @@ export const deleteAppointmentService = async (
     if (appointment) {
       return {
         success: true,
-        message: "appointment deleted successfully",
+        message: "Appointment cancelled",
       };
     } else {
       return {
@@ -174,7 +174,7 @@ export const updateAppointmentService = async (
     }
     return {
       success: true,
-      message: "appointment updated successfully",
+      message: "Appointment Rescheduled Successfully",
       updateAppointment,
     };
   } catch (err) {

@@ -6,6 +6,8 @@ import BackgroundAnime from "../../components/BackgroundAnime";
 import PasswordInput from "../../components/PasswordInput";
 import React from "react";
 import Logo from "../../components/Logo";
+import toast from "react-hot-toast";
+import { AxiosError } from "axios";
 
 const UserLogin = () => {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
@@ -39,12 +41,14 @@ const UserLogin = () => {
         localStorage.setItem("token", response.data?.token);
         navigate("/home");
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      setError(
-        error.response?.data?.message ??
-          "An unexpected error occurred. Please try again later."
-      );
+      toast.success(response.data.message);
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message?: string }>;
+      const message =
+        axiosError.response?.data?.message ??
+        "An unexpected error occurred. Please try again later.";
+      setError(message);
+      toast.error(message);
     }
   };
 
@@ -62,7 +66,7 @@ const UserLogin = () => {
       <BackgroundAnime />
       <form
         onSubmit={handleLogin}
-        className="w-95 rounded-4xl border border-primary bg-white backdrop-blur px-7 py-10 shadow-2xl"
+        className="w-95 rounded-4xl border border-primary bg-bg-primary/50 backdrop-blur px-7 py-10 shadow-2xl"
       >
         <h2 className="text-xl font-semibold mb-6 text-center text-primary">
           User Login
