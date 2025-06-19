@@ -7,6 +7,7 @@ import {
   filterDoctorController,
   getAllDoctorsController,
   getAvailableSlotsController,
+  getSlotUsageController,
   getUserInfoController,
   updateAppointmentController,
 } from "../controllers/userControllers";
@@ -49,6 +50,9 @@ router.get("/doctor", verifyToken, filterDoctorController);
 
 //Get all doctors list route
 router.get("/find-my-doctor", getAllDoctorsController);
+
+//Get doctor slot usage
+router.get("/doctor-slot-usage", verifyToken, getSlotUsageController);
 
 //Edit user profile
 router.patch("/profile-update", verifyToken, editUserProfileController);

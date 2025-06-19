@@ -7,6 +7,7 @@ import {
   filterDoctorService,
   getAllDoctorsService,
   getAvailableSlotsService,
+  getSlotUsageService,
   getUserInfoService,
   updateAppointmentService,
 } from "../services/userServices";
@@ -177,6 +178,31 @@ export const getAllDoctorsController = async (
       return;
     }
     res.status(200).json({ message: result.message, data: result.data });
+    return;
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+    return;
+  }
+};
+
+//Get slot usage controller
+export const getSlotUsageController = async (
+  req: CustomRequest,
+  res: Response
+) => {
+  const doctorId = req.query.doctorId as string;
+
+  if (!doctorId) {
+    return res.status(400).json({ message: "doctorId is required" });
+  }
+
+  try {
+    const result = await getSlotUsageService(doctorId);
+    if (!result.success) {
+      res.status(404).json({ message: result.message });
+      return;
+    }
+    res.status(200).json({ message: result.message, data: result.usage });
     return;
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
