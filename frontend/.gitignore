@@ -24,5 +24,6 @@ dist-ssr
 *.sw?
 
 package-lock.json
-tsconfig*.json
+tsconfig.node.json
+tsconfig.app.json
 vite-env.d.ts
