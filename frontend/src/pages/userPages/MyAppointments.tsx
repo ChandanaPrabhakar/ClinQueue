@@ -14,6 +14,7 @@ const MyAppointments = () => {
     phoneNumber: number;
     role: string;
   } | null>(null);
+  const [fullname, setFullname] = useState<string>("");
   const navigate = useNavigate();
 
   const onLogout = () => {
@@ -28,8 +29,11 @@ const MyAppointments = () => {
     const response = await axiosInstance.get("/user/get-user");
     if (response?.data) {
       setUserInfo(response.data.data);
+      setFullname(response.data.data.fullName);
     }
   };
+
+  console.log(userInfo);
 
   useEffect(() => {
     getUserInfo();
@@ -40,7 +44,7 @@ const MyAppointments = () => {
       <Logo />
       <BackgroundAnime />
       <Navbar pageName={"MyAppointments"} />
-      <ProfileInfoCard fullname={userInfo?.fullName} onLogout={onLogout} />
+      <ProfileInfoCard fullname={fullname} onLogout={onLogout} />
       <AppointmentCards />
     </div>
   );
