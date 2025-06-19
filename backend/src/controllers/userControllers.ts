@@ -5,6 +5,7 @@ import {
   deleteAppointmentService,
   editUserProfileService,
   filterDoctorService,
+  getAvailableSlotsService,
   getUserInfoService,
   updateAppointmentService,
 } from "../services/userServices";
@@ -76,9 +77,9 @@ export const deleteAppointmentController = async (
   res: Response
 ) => {
   const userId = req.user?.id as string;
-  const { appointmentId } = req.params;
+  const { doctorId } = req.params;
   try {
-    const result = await deleteAppointmentService(userId, appointmentId);
+    const result = await deleteAppointmentService(userId, doctorId);
     if (!result.success) {
       res.status(404).json({ message: result.message });
       return;
@@ -95,24 +96,40 @@ export const updateAppointmentController = async (
   res: Response
 ) => {
   const userId = req.user?.id as string;
-  const { appointmentId } = req.params;
+  const { doctorId } = req.params;
   const { timeSlot } = req.body;
   if (!timeSlot) {
     res.status(400).json({ message: "No changes provided" });
     return;
   }
   try {
-    const result = await updateAppointmentService(
-      userId,
-      appointmentId,
-      timeSlot
-    );
+    const result = await updateAppointmentService(userId, doctorId, timeSlot);
     if (!result.success) {
       res.status(404).json({ message: result.message });
     }
     res
       .status(200)
       .json({ message: result.message, data: result.updateAppointment });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error", error: err });
+  }
+};
+
+//Get available slots controller
+export const getAvailableSlotsController = async (
+  req: CustomRequest,
+  res: Response
+) => {
+  const { doctorId } = req.params;
+  try {
+    const result = await getAvailableSlotsService(doctorId);
+    if (!result.success) {
+      res.status(404).json({ message: result.message });
+      return;
+    }
+    res
+      .status(200)
+      .json({ message: result.message, data: result.availableSlotsData });
   } catch (err) {
     res.status(500).json({ message: "Internal server error", error: err });
   }
