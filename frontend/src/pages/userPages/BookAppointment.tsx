@@ -3,15 +3,15 @@
 // src/pages/BookAppointment.tsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../utils/api";
+import axiosInstance from "../../utils/api";
 import { Stepper, Step, StepLabel, Modal, IconButton } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import SpecialtySelection from "../components/booking/SpecialtySelection";
-import DoctorSelection from "../components/booking/DoctorSelection";
-import SlotSelection from "../components/booking/SlotSelection";
-import Confirmation from "../components/booking/Confirmation";
-import BackgroundAnime from "../components/BackgroundAnime";
-import Logo from "../components/Logo";
+import SpecialtySelection from "../../components/booking/SpecialtySelection";
+import DoctorSelection from "../../components/booking/DoctorSelection";
+import SlotSelection from "../../components/booking/SlotSelection";
+import Confirmation from "../../components/booking/Confirmation";
+import BackgroundAnime from "../../components/BackgroundAnime";
+import Logo from "../../components/Logo";
 
 const steps = [
   "Select Specialty",

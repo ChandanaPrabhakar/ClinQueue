@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import DoctorLogin from "./pages/authPages/DoctorLogin";
 import React from "react";
 import UserRegistration from "./pages/authPages/UserRegistration";
-import BookAppointment from "./pages/BookAppointment";
+import BookAppointment from "./pages/userPages/BookAppointment";
 const router = (
   <Routes>
     <Route path="/home" element={<Home />} />
