@@ -5,6 +5,7 @@ import axiosInstance from "../utils/api";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import PasswordInput from "./PasswordInput";
+import toast from "react-hot-toast";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -44,13 +45,15 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
       if (response?.data?.token) {
         localStorage.setItem("token", response.data?.token);
+        toast.success(response.data.message);
         onLoginSuccess();
       }
     } catch (error: any) {
-      setError(
+      const message =
         error.response?.data?.message ??
-          "An unexpected error occurred. Please try again later."
-      );
+        "An unexpected error occurred. Please try again later.";
+      setError(message);
+      toast.error(message);
     }
   };
 

@@ -193,7 +193,8 @@ export const getSlotUsageController = async (
   const doctorId = req.query.doctorId as string;
 
   if (!doctorId) {
-    return res.status(400).json({ message: "doctorId is required" });
+    res.status(400).json({ message: "doctorId is required" });
+    return;
   }
 
   try {

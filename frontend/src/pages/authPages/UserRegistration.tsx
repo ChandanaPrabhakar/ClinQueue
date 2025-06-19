@@ -5,11 +5,13 @@ import { motion } from "framer-motion";
 import PasswordInput from "../../components/PasswordInput";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/api";
+import { AxiosError } from "axios";
+import toast from "react-hot-toast";
 
 const UserRegistration = () => {
   const [fullName, setFullName] = useState<string>("");
   const [age, setAge] = useState<number>();
-  const [phoneNumber, setPhoneNumber] = useState<number>();
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
 
@@ -33,6 +35,11 @@ const UserRegistration = () => {
       return;
     }
 
+    if (phoneNumber.length !== 10) {
+      toast.error("Phone number must be exactly 10 digits.");
+      return;
+    }
+
     if (!password) {
       setError("Please enter valid password");
       return;
@@ -52,12 +59,14 @@ const UserRegistration = () => {
         localStorage.setItem("token", response?.data?.token);
         navigate("/home");
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      setError(
-        error.response.message ??
-          "An unexpected error occurred. Please try again later."
-      );
+      toast.success(response.data.message);
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message?: string }>;
+      const message =
+        axiosError.response?.data?.message ??
+        "An unexpected error occurred. Please try again later.";
+      setError(message);
+      toast.error(message);
     }
   };
   return (
@@ -66,7 +75,7 @@ const UserRegistration = () => {
       <BackgroundAnime />
       <form
         onSubmit={handleLogin}
-        className="w-95 rounded-4xl border border-primary bg-white backdrop-blur px-7 py-10 shadow-2xl"
+        className="w-95 rounded-4xl border border-primary bg-bg-primary/50 backdrop-blur px-7 py-10 shadow-2xl"
       >
         <h2 className="text-xl font-semibold mb-6 text-center text-primary">
           User Registration
@@ -107,9 +116,10 @@ const UserRegistration = () => {
           <input
             type="tel"
             value={phoneNumber}
-            onChange={(e) => setPhoneNumber(Number(e.target.value))}
-            pattern="[0-9]*"
-            inputMode="numeric"
+            onChange={(e) => {
+              const onlyDigits = e.target.value.replace(/\D/g, "").slice(0, 10);
+              setPhoneNumber(onlyDigits);
+            }}
             className="w-full border rounded-2xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
             placeholder="Enter phone number"
           />

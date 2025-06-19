@@ -42,7 +42,12 @@ const Home = () => {
       <Logo />
       {userInfo ? (
         <>
-          <ProfileInfoCard fullname={userInfo?.fullName} onLogout={onLogout} />{" "}
+          <ProfileInfoCard
+            fullname={userInfo?.fullName}
+            age={userInfo.age}
+            phoneNumber={userInfo.phoneNumber}
+            onLogout={onLogout}
+          />{" "}
           <Navbar pageName={"Home"} />
         </>
       ) : (

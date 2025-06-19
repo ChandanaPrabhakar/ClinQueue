@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import UserLogin from "./pages/authPages/UserLogin";
 import Home from "./pages/Home";
 import DoctorLogin from "./pages/authPages/DoctorLogin";
@@ -20,7 +21,12 @@ const router = (
   </Routes>
 );
 function App() {
-  return <div>{router}</div>;
+  return (
+    <div>
+      <Toaster position="top-right" reverseOrder={false} />
+      {router}
+    </div>
+  );
 }
 
 export default App;

@@ -1,16 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import { getInitials } from "../../utils/helper";
 import { motion } from "framer-motion";
+import ProfileModal from "../ProfileModal";
+import { useLocation } from "react-router-dom";
 
 interface ProfileCardProps {
   fullname: string;
+  age: number;
+  phoneNumber: number;
   onLogout: () => void;
 }
 
 const ProfileInfoCard: React.FC<ProfileCardProps> = ({
   fullname,
+  age,
+  phoneNumber,
   onLogout,
 }) => {
+  const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
+  const location = useLocation();
+
+  const handleProfileModal = () => {
+    setShowProfileModal(true);
+  };
+
+  const isHomePage = location.pathname === "/home";
+
   return (
     <div className="flex items-center gap-3 absolute top-7.5 right-10 font-bold text-primary text-lg">
       <motion.div
@@ -21,6 +36,7 @@ const ProfileInfoCard: React.FC<ProfileCardProps> = ({
           transition: { duration: 0.2 },
         }}
         transition={{ duration: 0.5 }}
+        onClick={handleProfileModal}
         className="w-12 h-12 flex items-center justify-center rounded-full text-bg-primary font-bold bg-secondary cursor-pointer"
       >
         {getInitials(fullname)}
@@ -41,6 +57,16 @@ const ProfileInfoCard: React.FC<ProfileCardProps> = ({
           Log Out
         </motion.button>
       </div>
+      {isHomePage && (
+        <ProfileModal
+          isOpen={showProfileModal}
+          onClose={() => setShowProfileModal(false)}
+          initials={getInitials(fullname)}
+          fullName={fullname}
+          age={age}
+          phoneNumber={phoneNumber}
+        />
+      )}
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../utils/api";
+import toast from "react-hot-toast";
 
 interface AppointmentInterface {
   _id: string;
@@ -29,6 +30,7 @@ const AppointmentCards = () => {
         setAppointments(response?.data.data || []);
       } catch (err) {
         setError("Failed to load appointments");
+        toast.error("Failed to Load Appointments");
         console.error(err);
       } finally {
         setLoading(false);
@@ -60,7 +62,7 @@ const AppointmentCards = () => {
         { timeSlot: selectedSlot }
       );
 
-      console.log(response);
+      toast.success(response.data.message);
 
       setAppointments((prev) =>
         prev.map((appt) =>
@@ -186,12 +188,14 @@ const AppointmentCard = ({
 
     try {
       setIsCancelling(true);
-      await axiosInstance.delete(
+      const response = await axiosInstance.delete(
         `/user/appointments/doctorId/${appointment.doctorId}`
       );
       setCancelled(true);
+      toast.success(response.data.message);
     } catch (error) {
       console.error("Error cancelling appointment:", error);
+      toast.error("Failed to Cancel Appointment");
     } finally {
       setIsCancelling(false);
     }

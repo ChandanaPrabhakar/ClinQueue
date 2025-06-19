@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// src/pages/BookAppointment.tsx
 import React, { useState, useEffect } from "react";
+import { AxiosError } from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import axiosInstance from "../../utils/api";
 import { Stepper, Step, StepLabel, Modal, IconButton } from "@mui/material";
@@ -12,6 +12,8 @@ import SlotSelection from "../../components/booking/SlotSelection";
 import Confirmation from "../../components/booking/Confirmation";
 import BackgroundAnime from "../../components/BackgroundAnime";
 import Logo from "../../components/Logo";
+import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 
 const steps = [
   "Select Specialty",
@@ -118,8 +120,14 @@ const BookAppointment = () => {
       setAppointmentDetails(response.data.data);
       setIsSuccessModalOpen(true);
       handleNext();
-    } catch (error) {
-      console.error("Error booking appointment:", error);
+      toast.success(response.data.message);
+    } catch (err) {
+      console.error("Error booking appointment:", err);
+      const error = err as AxiosError<{ message?: string }>;
+      const message =
+        error?.response?.data?.message ??
+        "An unexpected error occurred while booking the appointment.";
+      toast.error(message);
     }
   };
 
@@ -162,7 +170,12 @@ const BookAppointment = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center bg-bg-primary py-12 px-4 sm:px-6 lg:px-8">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+      className="min-h-screen flex items-center bg-bg-primary py-12 px-4 sm:px-6 lg:px-8"
+    >
       <BackgroundAnime />
       <Logo />
       <div className="max-w-3xl mx-auto bg-transparent backdrop-blur-lg border border-primary rounded-2xl shadow-lg overflow-hidden p-6">
@@ -210,7 +223,7 @@ const BookAppointment = () => {
           </div>
         </Modal>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
