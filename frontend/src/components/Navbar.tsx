@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FaHome, FaListAlt } from "react-icons/fa";
 
 interface PageName {
-  pageName: "Home" | "MyAppointments";
+  pageName: "" | "Home" | "MyAppointments";
 }
 
 const Navbar: React.FC<PageName> = ({ pageName }) => {

@@ -280,7 +280,7 @@ const AppointmentCard = ({
           <button
             disabled={cancelled}
             onClick={onReschedule}
-            className={`px-4 py-2 bg-primary text-white rounded-3xl hover:bg-secondary transition-colors ${
+            className={`px-4 py-2 bg-primary text-white rounded-3xl hover:bg-secondary transition-colors cursor-pointer ${
               cancelled ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
@@ -290,7 +290,7 @@ const AppointmentCard = ({
           <button
             onClick={handleCancel}
             disabled={isCancelling || cancelled}
-            className={`px-4 py-2 border border-red-500 text-red-500 rounded-3xl hover:bg-white transition-colors ${
+            className={`px-4 py-2 border border-red-500 text-red-500 rounded-3xl hover:bg-white transition-colors cursor-pointer ${
               cancelled ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >

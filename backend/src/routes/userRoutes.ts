@@ -5,6 +5,7 @@ import {
   deleteAppointmentController,
   editUserProfileController,
   filterDoctorController,
+  getAllDoctorsController,
   getAvailableSlotsController,
   getUserInfoController,
   updateAppointmentController,
@@ -45,6 +46,9 @@ router.get(
 
 //Filter doctor route
 router.get("/doctor", verifyToken, filterDoctorController);
+
+//Get all doctors list route
+router.get("/find-my-doctor", getAllDoctorsController);
 
 //Edit user profile
 router.patch("/profile-update", verifyToken, editUserProfileController);
