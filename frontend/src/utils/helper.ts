@@ -3,7 +3,7 @@ export const validateEmail = (email: string) => {
   return regex.test(email);
 };
 
-export const getInitials = (fullname) => {
+export const getInitials = (fullname: string) => {
   if (!fullname) return "";
 
   const words = fullname.trim().split(" ");
