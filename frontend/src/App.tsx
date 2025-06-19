@@ -5,6 +5,7 @@ import DoctorLogin from "./pages/authPages/DoctorLogin";
 import React from "react";
 import UserRegistration from "./pages/authPages/UserRegistration";
 import BookAppointment from "./pages/userPages/BookAppointment";
+import MyAppointments from "./pages/userPages/MyAppointments";
 const router = (
   <Routes>
     <Route path="/home" element={<Home />} />
@@ -12,6 +13,7 @@ const router = (
     <Route path="/doctor-login" element={<DoctorLogin />} />
     <Route path="/user-registration" element={<UserRegistration />} />
     <Route path="/book-appointment" element={<BookAppointment />} />
+    <Route path="/my-appointments" element={<MyAppointments />} />
   </Routes>
 );
 function App() {

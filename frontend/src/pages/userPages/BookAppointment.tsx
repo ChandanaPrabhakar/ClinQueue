@@ -119,7 +119,7 @@ const BookAppointment = () => {
         return (
           <Confirmation
             appointmentDetails={appointmentDetails}
-            onClose={() => navigate("/")}
+            onClose={() => navigate("/home")}
           />
         );
       default:
@@ -169,7 +169,7 @@ const BookAppointment = () => {
                 appointmentDetails={appointmentDetails}
                 onClose={() => {
                   setIsSuccessModalOpen(false);
-                  navigate("/my-appointments");
+                  navigate("/home");
                 }}
               />
             )}

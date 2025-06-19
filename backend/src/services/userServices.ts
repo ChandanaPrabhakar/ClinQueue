@@ -112,12 +112,12 @@ export const allAppointmentsService = async (id: string) => {
 //Delete appointment service
 export const deleteAppointmentService = async (
   userId: string,
-  appointmentId: string
+  doctorId: string
 ) => {
   try {
     const appointment: AppointmentInterface | null =
       await Appointment.findOneAndDelete({
-        _id: appointmentId,
+        doctorId: doctorId,
         userId: userId,
       });
     if (appointment) {
@@ -140,13 +140,13 @@ export const deleteAppointmentService = async (
 //Update appointment service
 export const updateAppointmentService = async (
   userId: string,
-  appointmentId: string,
+  doctorId: string,
   timeSlot: string
 ) => {
   try {
     const updateAppointment: AppointmentInterface | null =
       await Appointment.findOneAndUpdate(
-        { _id: appointmentId, userId: userId },
+        { doctorId: doctorId, userId: userId },
         { $set: { timeSlot: timeSlot } },
         { new: true }
       );
@@ -164,6 +164,27 @@ export const updateAppointmentService = async (
   } catch (err) {
     console.error("Error updating the appointment");
     throw new Error("Failed to update appointment");
+  }
+};
+
+//Get available slots service
+export const getAvailableSlotsService = async (doctorId: string) => {
+  try {
+    const availableSlotsDetails = await Doctor.findOne({ _id: doctorId });
+    if (!availableSlotsDetails) {
+      return {
+        success: false,
+        message: "Doctor not found",
+      };
+    }
+    return {
+      success: true,
+      message: "Available slots sent",
+      availableSlotsData: availableSlotsDetails.availableSlots,
+    };
+  } catch (err) {
+    console.error("Error fetching available slots", err);
+    throw new Error("Failed to fetch available slots");
   }
 };
 

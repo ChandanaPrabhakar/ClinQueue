@@ -5,6 +5,7 @@ import {
   deleteAppointmentController,
   editUserProfileController,
   filterDoctorController,
+  getAvailableSlotsController,
   getUserInfoController,
   updateAppointmentController,
 } from "../controllers/userControllers";
@@ -23,16 +24,23 @@ router.get("/appointments", verifyToken, allAppointmentsController);
 
 //Delete appointment route
 router.delete(
-  "/appointments/appointmentId/:appointmentId",
+  "/appointments/doctorId/:doctorId",
   verifyToken,
   deleteAppointmentController
 );
 
 //Update appointment route
 router.patch(
-  "/appointments/appointmentId/:appointmentId",
+  "/appointments/doctorId/:doctorId",
   verifyToken,
   updateAppointmentController
+);
+
+//Get available slots
+router.get(
+  "/doctors/doctorId/:doctorId",
+  verifyToken,
+  getAvailableSlotsController
 );
 
 //Filter doctor route
