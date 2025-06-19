@@ -167,6 +167,28 @@ export const updateAppointmentService = async (
   }
 };
 
+//Filter doctor service
+export const filterDoctorService = async (specialization: string) => {
+  try {
+    const filter = { specialization: new RegExp(`^${specialization}$`, "i") };
+    const doctor = await Doctor.find(filter).select("-password");
+    if (!doctor) {
+      return {
+        success: false,
+        message: "No doctor found",
+      };
+    }
+    return {
+      success: true,
+      message: "Doctor found successfully",
+      doctor,
+    };
+  } catch (err) {
+    console.error("Error filtering the doctor");
+    throw new Error("Failed to filter doctor");
+  }
+};
+
 //Edit user profile service
 export const editUserProfileService = async (
   userId: string,

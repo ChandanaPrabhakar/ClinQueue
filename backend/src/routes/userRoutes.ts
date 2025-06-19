@@ -4,6 +4,7 @@ import {
   bookAppointmentController,
   deleteAppointmentController,
   editUserProfileController,
+  filterDoctorController,
   getUserInfoController,
   updateAppointmentController,
 } from "../controllers/userControllers";
@@ -33,6 +34,9 @@ router.patch(
   verifyToken,
   updateAppointmentController
 );
+
+//Filter doctor route
+router.get("/doctor", verifyToken, filterDoctorController);
 
 //Edit user profile
 router.patch("/profile-update", verifyToken, editUserProfileController);
