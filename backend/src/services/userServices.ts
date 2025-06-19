@@ -210,6 +210,27 @@ export const filterDoctorService = async (specialization: string) => {
   }
 };
 
+//Get all doctors service
+export const getAllDoctorsService = async () => {
+  try {
+    const doctors: DoctorInterface[] = await Doctor.find();
+    if (!doctors || doctors.length === 0) {
+      return {
+        success: false,
+        message: "No doctors found",
+      };
+    }
+    return {
+      success: true,
+      message: "Doctors fetch successful",
+      data: doctors,
+    };
+  } catch (err) {
+    console.error("Error fetching doctors", err);
+    throw new Error("failed to fetch doctors");
+  }
+};
+
 //Edit user profile service
 export const editUserProfileService = async (
   userId: string,

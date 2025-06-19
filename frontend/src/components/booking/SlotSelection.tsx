@@ -14,6 +14,7 @@ interface SlotSelectionProps {
   onSlotSelect: (slot: string) => void;
   selectedSlot: string;
   onBack: () => void;
+  onCancel: () => void;
   onNext: () => void;
   patientMessage: string;
   setPatientMessage: (message: string) => void;
@@ -24,6 +25,7 @@ const SlotSelection: React.FC<SlotSelectionProps> = ({
   onSlotSelect,
   selectedSlot,
   onBack,
+  onCancel,
   onNext,
   patientMessage,
   setPatientMessage,
@@ -119,10 +121,10 @@ const SlotSelection: React.FC<SlotSelectionProps> = ({
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          onClick={onBack}
-          className="px-4 py-2 rounded-3xl text-md font-bold text-primary border border-gray-300 hover:bg-secondary hover:text-bg-primary"
+          onClick={onCancel}
+          className="px-4 py-2 rounded-3xl text-md font-bold text-primary border border-primary hover:bg-secondary hover:text-bg-primary cursor-pointer"
         >
-          Back
+          Cancel
         </motion.button>
         <motion.button
           whileHover={{ scale: 1.02 }}

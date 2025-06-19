@@ -35,8 +35,6 @@ const UserLogin = () => {
         password,
       });
 
-      console.log(response?.data?.message);
-
       if (response?.data?.token) {
         localStorage.setItem("token", response.data?.token);
         navigate("/home");

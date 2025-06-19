@@ -51,7 +51,7 @@ const DoctorAppointmentBanner: React.FC<DoctorAppointmentBannerProps> = ({
   };
 
   const handleFindDoctor = () => {
-    navigate("/doctors");
+    navigate("/find-my-doctor");
   };
 
   return (

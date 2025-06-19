@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // src/pages/BookAppointment.tsx
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axiosInstance from "../../utils/api";
 import { Stepper, Step, StepLabel, Modal, IconButton } from "@mui/material";
 import { Close } from "@mui/icons-material";
@@ -29,13 +29,22 @@ const BookAppointment = () => {
   const [patientMessage, setPatientMessage] = useState("");
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [appointmentDetails, setAppointmentDetails] = useState<any>(null);
+  const location = useLocation();
+  const passedDoctor = location.state?.selectedDoctor;
   const navigate = useNavigate();
 
   useEffect(() => {
     if (selectedSpecialty && activeStep === 1) {
       fetchDoctorsBySpecialty();
     }
-  }, [selectedSpecialty, activeStep]);
+
+    if (passedDoctor) {
+      setSelectedDoctor(passedDoctor);
+      setSelectedSpecialty(passedDoctor.specialization);
+      setActiveStep(2);
+      window.history.replaceState({}, document.title);
+    }
+  }, [selectedSpecialty, activeStep, passedDoctor]);
 
   const fetchDoctorsBySpecialty = async () => {
     try {
@@ -50,6 +59,10 @@ const BookAppointment = () => {
 
   const handleNext = () => setActiveStep((prev) => prev + 1);
   const handleBack = () => setActiveStep((prev) => prev - 1);
+  const handleCancel = () => {
+    setIsSuccessModalOpen(false);
+    navigate("/find-my-doctor");
+  };
 
   const handleSpecialtySelect = (specialty: string) => {
     setSelectedSpecialty(specialty);
@@ -110,6 +123,7 @@ const BookAppointment = () => {
             onSlotSelect={setSelectedSlot}
             selectedSlot={selectedSlot}
             onBack={handleBack}
+            onCancel={handleCancel}
             onNext={handleBookAppointment}
             patientMessage={patientMessage}
             setPatientMessage={setPatientMessage}

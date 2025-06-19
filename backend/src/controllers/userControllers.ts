@@ -5,6 +5,7 @@ import {
   deleteAppointmentService,
   editUserProfileService,
   filterDoctorService,
+  getAllDoctorsService,
   getAvailableSlotsService,
   getUserInfoService,
   updateAppointmentService,
@@ -66,8 +67,10 @@ export const allAppointmentsController = async (
     res
       .status(200)
       .json({ message: result.message, data: result.bookedAppointments });
+    return;
   } catch (err) {
     res.status(500).json({ message: "Internal server error", error: err });
+    return;
   }
 };
 
@@ -130,8 +133,10 @@ export const getAvailableSlotsController = async (
     res
       .status(200)
       .json({ message: result.message, data: result.availableSlotsData });
+    return;
   } catch (err) {
     res.status(500).json({ message: "Internal server error", error: err });
+    return;
   }
 };
 
@@ -153,6 +158,25 @@ export const filterDoctorController = async (
       return;
     }
     res.status(200).json({ message: result.message, data: result.doctor });
+    return;
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+    return;
+  }
+};
+
+//Get all doctors controller
+export const getAllDoctorsController = async (
+  req: CustomRequest,
+  res: Response
+) => {
+  try {
+    const result = await getAllDoctorsService();
+    if (!result.success) {
+      res.status(404).json({ message: result.message });
+      return;
+    }
+    res.status(200).json({ message: result.message, data: result.data });
     return;
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
