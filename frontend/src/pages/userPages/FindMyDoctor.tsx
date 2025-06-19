@@ -141,7 +141,7 @@ const FindMyDoctor = () => {
             <input
               type="text"
               placeholder="Search by name or specialty..."
-              className="w-full px-4 py-2 backdrop-blur-lg border border-primary rounded-3xl focus:ring-2 focus:ring-primary focus:border-primary"
+              className="w-full px-4 py-2 backdrop-blur-lg border border-primary rounded-3xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />

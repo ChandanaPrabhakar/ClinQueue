@@ -18,6 +18,7 @@ interface SlotSelectionProps {
   onNext: () => void;
   patientMessage: string;
   setPatientMessage: (message: string) => void;
+  slotUsage: Record<string, number>;
 }
 
 const SlotSelection: React.FC<SlotSelectionProps> = ({
@@ -29,6 +30,7 @@ const SlotSelection: React.FC<SlotSelectionProps> = ({
   onNext,
   patientMessage,
   setPatientMessage,
+  slotUsage,
 }) => {
   const today = new Date();
   const dates = Array.from({ length: 7 }, (_, i) => addHours(today, i * 24));
@@ -82,21 +84,31 @@ const SlotSelection: React.FC<SlotSelectionProps> = ({
       {/* Available Time Slots */}
       <p className="font-medium text-primary mb-2">Available Time Slots</p>
       <div className="grid grid-cols-3 gap-3 mb-6">
-        {doctor?.availableSlots?.map((slot: string) => (
-          <motion.button
-            key={slot}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => onSlotSelect(slot)}
-            className={`px-4 py-2 rounded-3xl border ${
-              selectedSlot === slot
-                ? "bg-secondary text-white"
-                : "bg-white text-primary border-gray-300"
-            } hover:shadow cursor-pointer`}
-          >
-            {slot}
-          </motion.button>
-        ))}
+        {doctor?.availableSlots?.map((slot: string) => {
+          const isFull = slotUsage?.[slot] >= 4;
+
+          return (
+            <motion.button
+              key={slot}
+              whileHover={{ scale: isFull ? 1 : 1.02 }}
+              whileTap={{ scale: isFull ? 1 : 0.98 }}
+              onClick={() => !isFull && onSlotSelect(slot)}
+              disabled={isFull}
+              className={`relative px-4 py-2 rounded-3xl border ${
+                selectedSlot === slot
+                  ? "bg-secondary text-white"
+                  : isFull
+                  ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                  : "bg-white text-primary border-gray-300"
+              } hover:shadow cursor-pointer`}
+            >
+              {slot}
+              <span className="text-xs block mt-1">
+                {slotUsage?.[slot] || 0}/4 booked
+              </span>
+            </motion.button>
+          );
+        })}
       </div>
 
       {/* Message Field */}

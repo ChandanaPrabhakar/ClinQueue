@@ -35,22 +35,38 @@ export const bookAppointmentService = async (
   timeSlot: string
 ) => {
   try {
-    const userData: UserInterface | null = await User.findById(id);
-    const doctorData: DoctorInterface | null = await Doctor.findById(doctorId);
+    const userData: UserInterface | null = await User.findById({ _id: id });
+    const doctorData: DoctorInterface | null = await Doctor.findById({
+      _id: doctorId,
+    });
+
+    const existingAppointments: number = await Appointment.countDocuments({
+      doctorId: doctorId,
+      timeSlot: timeSlot,
+      status: "booked",
+    });
+
+    if (existingAppointments >= 4) {
+      return {
+        success: false,
+        message: "This slot is fully booked. Please choose another slot.",
+      };
+    }
 
     if (!userData || !doctorData) {
       return {
         success: false,
-        message: "",
+        message: "Slot not available",
       };
     }
 
     const existingAppointmentSameDoctor = await Appointment.findOne({
-      doctorName: doctorData.doctorName,
+      userId: id,
+      doctorId: doctorId,
     });
 
     const existingAppointmentSameTime = await Appointment.findOne({
-      patientPhone: userData.phoneNumber,
+      userId: id,
       timeSlot,
     });
 
@@ -228,6 +244,30 @@ export const getAllDoctorsService = async () => {
   } catch (err) {
     console.error("Error fetching doctors", err);
     throw new Error("failed to fetch doctors");
+  }
+};
+
+//Get all slot usage service
+export const getSlotUsageService = async (doctorId: string) => {
+  try {
+    const slots = await Appointment.aggregate([
+      { $match: { doctorId: doctorId, status: "booked" } },
+      { $group: { _id: "$timeSlot", count: { $sum: 1 } } },
+    ]);
+
+    const usage: Record<string, number> = {};
+    slots.forEach((slot) => {
+      usage[slot._id] = slot.count;
+    });
+
+    return {
+      success: true,
+      message: "slots aggregated",
+      usage,
+    };
+  } catch (err) {
+    console.error("Error fetching slot usage data");
+    throw new Error("Failed to fetch slot usage");
   }
 };
 

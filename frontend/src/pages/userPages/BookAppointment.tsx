@@ -29,6 +29,7 @@ const BookAppointment = () => {
   const [patientMessage, setPatientMessage] = useState("");
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [appointmentDetails, setAppointmentDetails] = useState<any>(null);
+  const [slotUsage, setSlotUsage] = useState<Record<string, number>>({});
   const location = useLocation();
   const passedDoctor = location.state?.selectedDoctor;
   const navigate = useNavigate();
@@ -45,6 +46,12 @@ const BookAppointment = () => {
       window.history.replaceState({}, document.title);
     }
   }, [selectedSpecialty, activeStep, passedDoctor]);
+
+  useEffect(() => {
+    if (selectedDoctor && activeStep === 2) {
+      fetchSlotUsage(selectedDoctor._id);
+    }
+  }, [selectedDoctor, activeStep]);
 
   const fetchDoctorsBySpecialty = async () => {
     try {
@@ -69,8 +76,20 @@ const BookAppointment = () => {
     handleNext();
   };
 
+  const fetchSlotUsage = async (doctorId: string) => {
+    try {
+      const res = await axiosInstance.get(`/user/doctor-slot-usage`, {
+        params: { doctorId },
+      });
+      setSlotUsage(res.data.data);
+    } catch (error) {
+      console.error("Error fetching slot usage:", error);
+    }
+  };
+
   const handleDoctorSelect = (doctor: any) => {
     setSelectedDoctor(doctor);
+    fetchSlotUsage(doctor._id);
     handleNext();
   };
 
@@ -127,6 +146,7 @@ const BookAppointment = () => {
             onNext={handleBookAppointment}
             patientMessage={patientMessage}
             setPatientMessage={setPatientMessage}
+            slotUsage={slotUsage}
           />
         );
       case 3:
