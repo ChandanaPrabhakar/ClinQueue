@@ -4,6 +4,7 @@ import {
   bookAppointmentService,
   deleteAppointmentService,
   editUserProfileService,
+  filterDoctorService,
   getUserInfoService,
   updateAppointmentService,
 } from "../services/userServices";
@@ -114,6 +115,31 @@ export const updateAppointmentController = async (
       .json({ message: result.message, data: result.updateAppointment });
   } catch (err) {
     res.status(500).json({ message: "Internal server error", error: err });
+  }
+};
+
+//Filter doctor controller
+export const filterDoctorController = async (
+  req: CustomRequest,
+  res: Response
+) => {
+  const { specialization } = req.query;
+  if (!specialization || typeof specialization !== "string") {
+    res.status(400).json({ message: "Select a valid specialty" });
+    return;
+  }
+
+  try {
+    const result = await filterDoctorService(specialization);
+    if (!result.success) {
+      res.status(404).json({ message: result.message });
+      return;
+    }
+    res.status(200).json({ message: result.message, data: result.doctor });
+    return;
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+    return;
   }
 };
 

@@ -53,9 +53,6 @@ export const userLoginController = async (req: Request, res: Response) => {
 
 //Doctor registration controller
 export const doctorRegisterController = async (req: Request, res: Response) => {
-  const { id } = req.body.user;
-
-  console.log(id);
   try {
     const {
       doctorName,
