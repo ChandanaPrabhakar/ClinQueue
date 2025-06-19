@@ -2,7 +2,15 @@ import React from "react";
 import { getInitials } from "../../utils/helper";
 import { motion } from "framer-motion";
 
-const ProfileInfoCard = ({ fullname, onLogout }) => {
+interface ProfileCardProps {
+  fullname: string;
+  onLogout: () => void;
+}
+
+const ProfileInfoCard: React.FC<ProfileCardProps> = ({
+  fullname,
+  onLogout,
+}) => {
   return (
     <div className="flex items-center gap-3 absolute top-7.5 right-10 font-bold text-primary text-lg">
       <motion.div
