@@ -9,7 +9,7 @@ import MyAppointments from "./pages/userPages/MyAppointments";
 import FindMyDoctor from "./pages/userPages/FindMyDoctor";
 const router = (
   <Routes>
-    <Route path="/" element={<Navigate to="/login" replace />} />
+    <Route path="/" element={<Navigate to="/home" replace />} />
     <Route path="/home" element={<Home />} />
     <Route path="/user-login" element={<UserLogin />} />
     <Route path="/doctor-login" element={<DoctorLogin />} />
