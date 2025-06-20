@@ -28,4 +28,8 @@
   .doc-cat{
     @apply w-25 h-25 rounded-full 
   }
+
+  .doc-para{
+    @apply w-[50%] border border-primary bg-bg-secondary/50 rounded-3xl px-7 py-2 mb-2 text-lg font-semibold text-primary
+  }
 }

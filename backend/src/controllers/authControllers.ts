@@ -40,14 +40,17 @@ export const userLoginController = async (req: Request, res: Response) => {
 
     if (!result.success) {
       res.status(404).json({ message: result.message });
+      return;
     }
 
     res.status(200).json({
       message: result.message,
       token: result.token,
     });
+    return;
   } catch (err) {
     res.status(500).json({ message: "Internal server error", error: err });
+    return;
   }
 };
 

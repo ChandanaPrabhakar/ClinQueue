@@ -8,6 +8,7 @@ import UserRegistration from "./pages/authPages/UserRegistration";
 import BookAppointment from "./pages/userPages/BookAppointment";
 import MyAppointments from "./pages/userPages/MyAppointments";
 import FindMyDoctor from "./pages/userPages/FindMyDoctor";
+import DoctorProfile from "./pages/doctorPages/DoctorProfile";
 const router = (
   <Routes>
     <Route path="/" element={<Navigate to="/home" replace />} />
@@ -18,6 +19,7 @@ const router = (
     <Route path="/book-appointment" element={<BookAppointment />} />
     <Route path="/my-appointments" element={<MyAppointments />} />
     <Route path="/find-my-doctor" element={<FindMyDoctor />} />
+    <Route path="/doctor-profile" element={<DoctorProfile />} />
   </Routes>
 );
 function App() {

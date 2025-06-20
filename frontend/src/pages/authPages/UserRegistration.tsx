@@ -73,6 +73,15 @@ const UserRegistration = () => {
     <div className="bg-bg-primary min-h-screen flex items-center justify-center relative">
       <Logo />
       <BackgroundAnime />
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.98 }}
+        transition={{ duration: 0.2 }}
+        onClick={() => navigate("/home")}
+        className="absolute top-7.5 right-10 font-bold text-bg-primary text-md rounded-3xl bg-primary px-5 py-2 hover:bg-secondary/85 hover:text-primary hover:border hover:border-primary cursor-pointer"
+      >
+        Go to Home
+      </motion.button>
       <form
         onSubmit={handleLogin}
         className="w-95 rounded-4xl border border-primary bg-bg-primary/50 backdrop-blur px-7 py-10 shadow-2xl"

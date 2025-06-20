@@ -15,3 +15,16 @@ export const getInitials = (fullname: string) => {
 
   return initials.toUpperCase();
 };
+
+export const getDoctorInitials = (fullname: string): string => {
+  if (!fullname) return "";
+
+  const cleanedName = fullname.replace(/^(Dr\.)\s*/i, "").trim();
+
+  const nameParts = cleanedName.split(" ");
+
+  const firstInitial = nameParts[0]?.[0] ?? "";
+  const secondInitial = nameParts[1]?.[0] ?? "";
+
+  return (firstInitial + secondInitial).toUpperCase();
+};
