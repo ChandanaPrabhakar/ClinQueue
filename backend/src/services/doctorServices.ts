@@ -1,6 +1,29 @@
 import Appointment, { AppointmentInterface } from "../models/appointmentModel";
 import Doctor, { DoctorInterface } from "../models/doctorModel";
 
+//Get doctor details service
+export const getDoctorProfileService = async (doctorId: string) => {
+  try {
+    const doctorProfile: DoctorInterface | null = await Doctor.findById({
+      _id: doctorId,
+    });
+    if (!doctorProfile) {
+      return {
+        success: false,
+        message: "Details Not Found",
+      };
+    }
+    return {
+      success: true,
+      message: "Doctor Profile Loaded",
+      data: doctorProfile,
+    };
+  } catch (error) {
+    console.error("Error loading doctor profile");
+    throw new Error("Failed to load doctor profile");
+  }
+};
+
 //edit available slots
 export const editAvailableSlotsService = async (
   doctorId: string,

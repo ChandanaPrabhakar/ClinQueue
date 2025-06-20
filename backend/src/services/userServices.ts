@@ -276,14 +276,14 @@ export const editUserProfileService = async (
   userId: string,
   fullName: string,
   age: number,
-  phoneNumber: number
+  phoneNumber: string
 ) => {
   try {
     const user: UserInterface | null = await User.findById(userId);
     const updates: Partial<{
       fullName: string;
       age: number;
-      phoneNumber: number;
+      phoneNumber: string;
     }> = {};
 
     if (fullName && fullName !== user?.fullName) {
