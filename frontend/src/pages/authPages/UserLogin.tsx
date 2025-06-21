@@ -53,20 +53,22 @@ const UserLogin = () => {
   };
 
   return (
-    <div className="bg-bg-primary min-h-screen flex items-center justify-center relative">
-      <div className="absolute top-7.5 right-10 font-bold text-primary text-lg">
+    <div className="bg-bg-primary min-h-screen flex items-center justify-center relative px-4 sm:px-6">
+      <div className="absolute top-5 right-4 sm:top-7.5 sm:right-10 font-bold text-primary text-sm sm:text-lg">
         <p>
-          Are you a Doctor?{""}{" "}
+          Are you a Doctor?{" "}
           <Link to={"/doctor-login"} className="underline">
             Login
           </Link>
         </p>
       </div>
+
       <Logo />
       <BackgroundAnime />
+
       <form
         onSubmit={handleLogin}
-        className="w-95 rounded-4xl border border-primary bg-bg-primary/50 backdrop-blur px-7 py-10 shadow-2xl"
+        className="w-full max-w-md sm:max-w-lg md:max-w-xl rounded-4xl border border-primary bg-bg-primary/50 backdrop-blur px-6 sm:px-8 py-8 sm:py-10 shadow-2xl"
       >
         <h2 className="text-xl font-semibold mb-6 text-center text-primary">
           User Login
@@ -82,7 +84,7 @@ const UserLogin = () => {
             type="text"
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
-            className="w-full border rounded-2xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full border rounded-2xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-sm"
             placeholder="Enter phone number"
           />
         </div>
@@ -104,14 +106,15 @@ const UserLogin = () => {
             scale: 1.1,
             transition: { duration: 0.2 },
           }}
-          transition={{ duration: 0.5 }} // For initial and animate transitions
+          transition={{ duration: 0.5 }}
           type="submit"
-          className="btn-login"
+          className="btn-login w-full mt-4 py-2 rounded-2xl bg-primary text-white font-semibold text-sm sm:text-base"
         >
           Login
         </motion.button>
-        <p className="text-center my-5">
-          Not Registered Yet? {""}
+
+        <p className="text-center my-5 text-sm sm:text-base">
+          Not Registered Yet?{" "}
           <Link to={"/user-registration"} className="underline text-primary">
             Create an Account
           </Link>

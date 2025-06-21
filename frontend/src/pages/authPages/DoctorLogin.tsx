@@ -52,22 +52,25 @@ const DoctorLogin = () => {
       toast.error(message);
     }
   };
+
   return (
-    <div className="bg-bg-primary min-h-screen flex items-center justify-center relative">
+    <div className="bg-bg-primary min-h-screen flex items-center justify-center relative px-4 sm:px-6">
       <Logo />
       <BackgroundAnime />
+
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.98 }}
         transition={{ duration: 0.2 }}
         onClick={() => navigate("/home")}
-        className="absolute top-7.5 right-10 font-bold text-bg-primary text-md rounded-3xl bg-primary px-5 py-2 hover:bg-secondary/85 hover:text-primary hover:border hover:border-primary cursor-pointer"
+        className="absolute top-5 right-4 sm:top-7 sm:right-10 font-bold text-bg-primary text-sm sm:text-md rounded-3xl bg-primary px-4 sm:px-5 py-2 hover:bg-secondary/85 hover:text-primary hover:border hover:border-primary cursor-pointer"
       >
         Go to Home
       </motion.button>
+
       <form
         onSubmit={handleLogin}
-        className="w-95 rounded-4xl border border-primary bg-bg-primary/50 backdrop-blur px-7 py-10 shadow-2xl"
+        className="w-full max-w-md sm:max-w-lg md:max-w-xl rounded-4xl border border-primary bg-bg-primary/50 backdrop-blur px-6 sm:px-8 py-8 sm:py-10 shadow-2xl"
       >
         <h2 className="text-xl font-semibold mb-6 text-center text-primary">
           Doctor Login
@@ -83,7 +86,7 @@ const DoctorLogin = () => {
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full border rounded-2xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full border rounded-2xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-sm"
             placeholder="Enter email id"
           />
         </div>
@@ -97,6 +100,7 @@ const DoctorLogin = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
+
         <motion.button
           initial={{ scale: 1 }}
           animate={{ scale: 1 }}
@@ -106,7 +110,7 @@ const DoctorLogin = () => {
           }}
           transition={{ duration: 0.5 }}
           type="submit"
-          className="btn-login"
+          className="btn-login w-full mt-4 py-2 rounded-2xl bg-primary text-white font-semibold text-sm sm:text-base"
         >
           Login
         </motion.button>

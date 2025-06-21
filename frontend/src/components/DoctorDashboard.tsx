@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../utils/api";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 
 interface Doctor {
   doctorName: string;
@@ -31,6 +32,7 @@ const timeOptions: string[] = [
 
 const DoctorDashboard: React.FC<DoctorDashboardProps> = ({ doctorInfo }) => {
   const [selectedSlots, setSelectedSlots] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (doctorInfo?.availableSlots) {
@@ -45,66 +47,85 @@ const DoctorDashboard: React.FC<DoctorDashboardProps> = ({ doctorInfo }) => {
   };
 
   const submitSlots = async () => {
+    setIsLoading(true);
     try {
       await axiosInstance.patch("/doctor/available-slots", {
         timeSlots: selectedSlots,
       });
-      alert("Slots updated!");
+      toast.success("Slots updated!");
     } catch (err) {
       console.error("Error updating slots", err);
+      toast.error("Something went wrong!");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="bg-transparent backdrop-blur-lg border-2 border-primary rounded-3xl  p-6 max-w-3xl mx-auto shadow-lg ">
-      <h1 className="text-3xl font-bold text-center text-primary mb-7 underline underline-offset-6 my-5">
+    <div className="bg-transparent backdrop-blur-lg border-2 border-primary rounded-3xl p-6 max-w-3xl mx-auto shadow-lg">
+      <h1 className="text-3xl font-bold text-center text-primary mb-7 underline underline-offset-4">
         Welcome, Dr. {doctorInfo.doctorName}
       </h1>
 
-      <div className="flex items-center flex-col">
-        <div className="doc-para">
-          <p>Email: {doctorInfo.email}</p>
-        </div>
-        <div className="doc-para">
-          <p>Specialization: {doctorInfo.specialization}</p>
-        </div>
-        <div className="doc-para">
-          <p>Qualification: {doctorInfo.qualification}</p>
-        </div>
-        <div className="doc-para">
-          <p>Experience: {doctorInfo.experience} years</p>
-        </div>
+      {/* Doctor Info */}
+      <div className="flex flex-col gap-2 text-primary mb-6 text-sm sm:text-base">
+        <p>
+          <strong>Email:</strong> {doctorInfo.email}
+        </p>
+        <p>
+          <strong>Specialization:</strong> {doctorInfo.specialization}
+        </p>
+        <p>
+          <strong>Qualification:</strong> {doctorInfo.qualification}
+        </p>
+        <p>
+          <strong>Experience:</strong> {doctorInfo.experience} years
+        </p>
       </div>
-      <div className="mt-6">
-        <h2 className="text-xl font-semibold text-primary mb-7.5">
+
+      {/* Slot Selector */}
+      <div>
+        <h2 className="text-xl font-semibold text-primary mb-5">
           Select Available Slots
         </h2>
         <div className="flex flex-wrap gap-3">
-          {timeOptions.map((slot) => (
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ duration: 0.2 }}
-              key={slot}
-              onClick={() => toggleSlot(slot)}
-              className={`px-4 py-2 rounded-full font-medium border cursor-pointer ${
-                selectedSlots.includes(slot)
-                  ? "bg-primary text-bg-primary"
-                  : "bg-bg-primary text-primary"
-              }`}
-            >
-              {slot}
-            </motion.button>
-          ))}
+          {timeOptions.map((slot) => {
+            const isSelected = selectedSlots.includes(slot);
+            return (
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.2 }}
+                key={slot}
+                onClick={() => toggleSlot(slot)}
+                aria-pressed={isSelected}
+                aria-label={`Toggle slot ${slot}`}
+                className={`px-4 py-2 rounded-full font-medium border cursor-pointer text-sm sm:text-base ${
+                  isSelected
+                    ? "bg-primary text-bg-primary"
+                    : "bg-bg-primary text-primary"
+                }`}
+              >
+                {slot}
+              </motion.button>
+            );
+          })}
         </div>
+
+        {/* Submit Button */}
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.98 }}
           transition={{ duration: 0.2 }}
           onClick={submitSlots}
-          className="mt-10 px-6 py-2 bg-secondary text-white rounded-3xl hover:bg-primary hover:text-bg-primary cursor-pointer"
+          disabled={selectedSlots.length === 0 || isLoading}
+          className={`mt-10 px-6 py-2 rounded-3xl text-white text-sm sm:text-base font-semibold transition-all ${
+            selectedSlots.length === 0 || isLoading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-secondary hover:bg-primary"
+          }`}
         >
-          Submit Slots
+          {isLoading ? "Saving..." : "Submit Slots"}
         </motion.button>
       </div>
     </div>

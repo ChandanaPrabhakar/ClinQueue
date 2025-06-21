@@ -69,8 +69,9 @@ const UserRegistration = () => {
       toast.error(message);
     }
   };
+
   return (
-    <div className="bg-bg-primary min-h-screen flex items-center justify-center relative">
+    <div className="bg-bg-primary min-h-screen flex items-center justify-center relative px-4 sm:px-6">
       <Logo />
       <BackgroundAnime />
       <motion.button
@@ -78,13 +79,13 @@ const UserRegistration = () => {
         whileTap={{ scale: 0.98 }}
         transition={{ duration: 0.2 }}
         onClick={() => navigate("/home")}
-        className="absolute top-7.5 right-10 font-bold text-bg-primary text-md rounded-3xl bg-primary px-5 py-2 hover:bg-secondary/85 hover:text-primary hover:border hover:border-primary cursor-pointer"
+        className="absolute top-5 right-4 sm:top-7.5 sm:right-10 font-bold text-bg-primary text-sm sm:text-md rounded-3xl bg-primary px-4 py-2 sm:px-5 hover:bg-secondary/85 hover:text-primary hover:border hover:border-primary cursor-pointer"
       >
         Go to Home
       </motion.button>
       <form
         onSubmit={handleLogin}
-        className="w-95 rounded-4xl border border-primary bg-bg-primary/50 backdrop-blur px-7 py-10 shadow-2xl"
+        className="w-full max-w-md sm:max-w-lg md:max-w-xl rounded-4xl border border-primary bg-bg-primary/50 backdrop-blur px-6 sm:px-8 py-8 sm:py-10 shadow-2xl"
       >
         <h2 className="text-xl font-semibold mb-6 text-center text-primary">
           User Registration
@@ -100,7 +101,7 @@ const UserRegistration = () => {
             type="text"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            className="w-full border rounded-2xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full border rounded-2xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-sm"
             placeholder="Enter Full Name"
           />
         </div>
@@ -113,7 +114,7 @@ const UserRegistration = () => {
             type="text"
             value={age}
             onChange={(e) => setAge(Number(e.target.value))}
-            className="w-full border rounded-2xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full border rounded-2xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-sm"
             placeholder="Enter Age"
           />
         </div>
@@ -129,7 +130,7 @@ const UserRegistration = () => {
               const onlyDigits = e.target.value.replace(/\D/g, "").slice(0, 10);
               setPhoneNumber(onlyDigits);
             }}
-            className="w-full border rounded-2xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full border rounded-2xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-sm"
             placeholder="Enter phone number"
           />
         </div>
@@ -152,12 +153,12 @@ const UserRegistration = () => {
           }}
           transition={{ duration: 0.5 }}
           type="submit"
-          className="btn-login"
+          className="btn-login w-full mt-4 py-2 rounded-2xl bg-primary text-white font-semibold text-sm sm:text-base"
         >
-          Login
+          Register
         </motion.button>
-        <p className="text-center my-5">
-          Already have an account? {""}
+        <p className="text-center my-5 text-sm sm:text-base">
+          Already have an account?{" "}
           <Link to={"/user-login"} className="underline text-primary">
             Login
           </Link>
