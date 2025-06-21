@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../utils/api";
 import toast from "react-hot-toast";
+import RescheduleModal from "../RescheduleModal";
 
 interface AppointmentInterface {
   _id: string;
@@ -22,6 +23,7 @@ const AppointmentCards = () => {
   const [reschedulingId, setReschedulingId] = useState<string | null>(null);
   const [selectedSlot, setSelectedSlot] = useState("");
   const [doctorSlots, setDoctorSlots] = useState<string[]>([]);
+  const [slotsLoading, setSlotsLoading] = useState(false);
 
   useEffect(() => {
     const loadAppointments = async () => {
@@ -41,6 +43,7 @@ const AppointmentCards = () => {
   }, []);
 
   const fetchDoctorSlots = async (doctorId: string) => {
+    setSlotsLoading(true);
     try {
       const response = await axiosInstance.get(
         `user/doctors/doctorId/${doctorId}`
@@ -48,6 +51,9 @@ const AppointmentCards = () => {
       setDoctorSlots(response.data.data || []);
     } catch (err) {
       console.error(err);
+      toast.error("Failed to load slots");
+    } finally {
+      setSlotsLoading(false);
     }
   };
 
@@ -74,6 +80,7 @@ const AppointmentCards = () => {
       setSelectedSlot("");
     } catch (err) {
       console.error(err);
+      toast.error("Failed to reschedule");
     }
   };
 
@@ -92,81 +99,34 @@ const AppointmentCards = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-      {reschedulingId && (
-        <div className="fixed inset-0 bg-transparent backdrop-blur-md flex items-center justify-center z-50">
-          <div className="bg-transparent border-5 border-primary rounded-3xl shadow-md shadow-secondary w-full max-w-md p-6 relative">
-            <button
-              onClick={() => {
-                setReschedulingId(null);
-                setSelectedSlot("");
-              }}
-              className="absolute top-4 right-4 text-xl font-bold hover:text-red-500 cursor-pointer"
-            >
-              ×
-            </button>
-
-            <h3 className="text-xl font-bold mb-4">Reschedule Appointment</h3>
-
-            <div className="mb-4">
-              <h4 className="text-md text-primary font-bold mb-2">
-                Available Time Slots:
-              </h4>
-              <div className="grid grid-cols-2 gap-2">
-                {doctorSlots.map((slot) => (
-                  <button
-                    key={slot}
-                    onClick={() => setSelectedSlot(slot)}
-                    className={`p-2 border rounded-3xl text-sm cursor-pointer ${
-                      selectedSlot === slot
-                        ? "bg-bg-secondary border-primary text-primary"
-                        : "border-primary hover:bg-gray-50"
-                    }`}
-                  >
-                    {slot}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-3 mt-4">
-              <button
-                onClick={() => {
-                  setReschedulingId(null);
-                  setSelectedSlot("");
-                }}
-                className="px-4 py-2 border text-primary border-primary rounded-3xl cursor-pointer"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() =>
-                  handleReschedule(
-                    reschedulingId,
-                    appointments.find((a) => a._id === reschedulingId)
-                      ?.doctorId || ""
-                  )
-                }
-                disabled={!selectedSlot}
-                className={`px-4 py-2 rounded-3xl cursor-pointer ${
-                  selectedSlot
-                    ? "bg-primary text-bg-primary hover:bg-secondary"
-                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                }`}
-              >
-                Confirm Reschedule
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <RescheduleModal
+        isOpen={!!reschedulingId}
+        doctorSlots={doctorSlots}
+        selectedSlot={selectedSlot}
+        setSelectedSlot={setSelectedSlot}
+        onClose={() => {
+          setReschedulingId(null);
+          setSelectedSlot("");
+        }}
+        onConfirm={() => {
+          const appt = appointments.find((a) => a._id === reschedulingId);
+          if (appt) {
+            handleReschedule(appt._id, appt.doctorId);
+          }
+        }}
+        loading={slotsLoading}
+        doctorName={
+          appointments.find((a) => a._id === reschedulingId)?.doctorName || ""
+        }
+      />
 
       {appointments.map((appointment) => (
         <AppointmentCard
           key={appointment._id}
           appointment={appointment}
-          onReschedule={() => {
+          onReschedule={async () => {
             setReschedulingId(appointment._id);
-            fetchDoctorSlots(appointment.doctorId);
+            await fetchDoctorSlots(appointment.doctorId);
           }}
         />
       ))}
@@ -215,7 +175,7 @@ const AppointmentCard = ({
   return (
     <div
       className={`border rounded-3xl backdrop-blur-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden ${
-        isCompleted ? "opacity-70 backdrop-blur-2xl pointer-events-none" : ""
+        isCompleted ? "opacity-70 pointer-events-none" : ""
       }`}
     >
       <div className="p-6">
@@ -234,66 +194,19 @@ const AppointmentCard = ({
           {appointment.doctorSpec}
         </p>
 
-        <div className="mt-4 space-y-2">
-          <div className="flex items-center">
-            <svg
-              className="w-5 h-5 text-primary mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span>{appointment.timeSlot}</span>
+        <div className="mt-4 space-y-2 text-sm">
+          <div>{appointment.timeSlot}</div>
+          <div>
+            {appointment.patientName} (Age: {appointment.patientAge})
           </div>
-
-          <div className="flex items-center">
-            <svg
-              className="w-5 h-5 text-primary mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-              />
-            </svg>
-            <span>
-              {appointment.patientName} (Age: {appointment.patientAge})
-            </span>
-          </div>
-
-          <div className="flex items-center">
-            <svg
-              className="w-5 h-5 text-primary mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-              />
-            </svg>
-            <span>{appointment.patientPhone}</span>
-          </div>
+          <div>{appointment.patientPhone}</div>
         </div>
 
-        <div className="mt-6 flex gap-10 space-x-3">
+        <div className="mt-6 flex gap-4">
           <button
             disabled={cancelled || isCompleted}
             onClick={onReschedule}
-            className={`px-4 py-2 bg-primary text-white rounded-3xl hover:bg-secondary transition-colors cursor-pointer ${
+            className={`px-4 py-2 bg-primary text-white rounded-3xl hover:bg-secondary transition-colors ${
               cancelled || isCompleted ? "opacity-70 cursor-not-allowed" : ""
             }`}
           >
@@ -303,7 +216,7 @@ const AppointmentCard = ({
           <button
             onClick={handleCancel}
             disabled={isCancelling || cancelled || isCompleted}
-            className={`px-4 py-2 border border-red-500 text-red-500 rounded-3xl hover:bg-white transition-colors cursor-pointer ${
+            className={`px-4 py-2 border border-red-500 text-red-500 rounded-3xl hover:bg-white transition-colors ${
               isCancelling || cancelled || isCompleted
                 ? "opacity-70 cursor-not-allowed"
                 : ""

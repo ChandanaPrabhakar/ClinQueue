@@ -36,25 +36,27 @@ const SlotSelection: React.FC<SlotSelectionProps> = ({
   const dates = Array.from({ length: 7 }, (_, i) => addHours(today, i * 24));
 
   return (
-    <div className="p-4">
+    <div className="p-4 max-w-screen-lg mx-auto">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-2">
         <button
           className="flex items-center text-secondary font-bold hover:underline cursor-pointer"
           onClick={onBack}
         >
           <Person className="mr-1" /> Back
         </button>
-        <h2 className="text-xl font-bold text-primary">Select Time Slot</h2>
-        <div></div>
+        <h2 className="text-xl font-bold text-primary text-center sm:text-left">
+          Select Time Slot
+        </h2>
+        <div className="hidden sm:block w-[40px]" />
       </div>
 
       {/* Doctor Card */}
-      <div className="bg-secondary shadow-md rounded-3xl p-4 mb-6 flex items-center">
-        <div className="w-16 h-16 bg-bg-secondary text-primary flex items-center justify-center rounded-full text-2xl font-bold mr-4">
+      <div className="bg-secondary shadow-md rounded-3xl p-4 mb-6 flex flex-col sm:flex-row items-center sm:items-start">
+        <div className="w-16 h-16 bg-bg-secondary text-primary flex items-center justify-center rounded-full text-2xl font-bold mb-4 sm:mb-0 sm:mr-4">
           {doctor?.doctorName?.charAt(0)}
         </div>
-        <div>
+        <div className="text-center sm:text-left">
           <h3 className="text-lg font-semibold text-bg-primary">
             {doctor?.doctorName}
           </h3>
@@ -70,7 +72,7 @@ const SlotSelection: React.FC<SlotSelectionProps> = ({
             key={index}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className={`min-w-[120px] px-4 py-2 rounded-3xl border ${
+            className={`min-w-[120px] px-4 py-2 rounded-3xl border shrink-0 ${
               index === 0
                 ? "bg-secondary text-white"
                 : "bg-white text-primary border-gray-300"
@@ -83,7 +85,7 @@ const SlotSelection: React.FC<SlotSelectionProps> = ({
 
       {/* Available Time Slots */}
       <p className="font-medium text-primary mb-2">Available Time Slots</p>
-      <div className="grid grid-cols-3 gap-3 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-6">
         {doctor?.availableSlots?.map((slot: string) => {
           const isFull = slotUsage?.[slot] >= 4;
 
@@ -94,7 +96,7 @@ const SlotSelection: React.FC<SlotSelectionProps> = ({
               whileTap={{ scale: isFull ? 1 : 0.98 }}
               onClick={() => !isFull && onSlotSelect(slot)}
               disabled={isFull}
-              className={`relative px-4 py-2 rounded-3xl border ${
+              className={`relative px-4 py-2 rounded-3xl border text-center ${
                 selectedSlot === slot
                   ? "bg-secondary text-white"
                   : isFull
@@ -129,12 +131,12 @@ const SlotSelection: React.FC<SlotSelectionProps> = ({
       <div className="border-t border-bg-secondary my-4"></div>
 
       {/* Footer Actions */}
-      <div className="flex justify-between">
+      <div className="flex flex-col sm:flex-row justify-between gap-4">
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={onCancel}
-          className="px-4 py-2 rounded-3xl text-md font-bold text-primary border border-primary hover:bg-secondary hover:text-bg-primary cursor-pointer"
+          className="w-full sm:w-auto px-4 py-2 rounded-3xl text-md font-bold text-primary border border-primary hover:bg-secondary hover:text-bg-primary cursor-pointer"
         >
           Cancel
         </motion.button>
@@ -143,7 +145,7 @@ const SlotSelection: React.FC<SlotSelectionProps> = ({
           whileTap={{ scale: 0.98 }}
           onClick={onNext}
           disabled={!selectedSlot}
-          className={`px-4 py-2 rounded-3xl flex items-center gap-2 text-md font-bold ${
+          className={`w-full sm:w-auto px-4 py-2 rounded-3xl flex items-center justify-center gap-2 text-md font-bold ${
             selectedSlot
               ? "bg-primary text-white hover:bg-secondary"
               : "bg-gray-300 text-gray-600 cursor-not-allowed"

@@ -23,7 +23,6 @@ const DoctorAppointmentCards = () => {
         const response = await axiosInstance.get("/doctor/appointments");
         const allAppointments = response.data?.data || [];
 
-        // Filter out completed appointments initially
         const filtered = allAppointments.filter(
           (appt: Appointment) => appt.status !== "completed"
         );
@@ -48,7 +47,6 @@ const DoctorAppointmentCards = () => {
       });
       toast.success("Marked as Completed");
 
-      // Remove completed appointment from UI
       setAppointments((prev) => prev.filter((appt) => appt._id !== id));
     } catch (err) {
       console.error(err);
@@ -70,20 +68,20 @@ const DoctorAppointmentCards = () => {
   if (error) return <div className="text-center text-red-500">{error}</div>;
   if (!filteredAppointments.length)
     return (
-      <div className="flex items-center justify-center h-[60vh]">
-        <div className="text-center text-lg font-bold w-[50%] border border-primary bg-secondary/50 text-primary px-5 py-3 rounded-3xl">
+      <div className="flex items-center justify-center min-h-[60vh] px-4">
+        <div className="text-center text-base sm:text-lg font-bold w-full sm:w-[80%] md:w-[60%] lg:w-[50%] border border-primary bg-secondary/50 text-primary px-4 py-3 rounded-3xl">
           No appointments found
         </div>
       </div>
     );
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       {/* Time Slot Filter */}
       <div className="mb-6 flex flex-wrap gap-3 justify-center">
         <button
           onClick={() => setSelectedSlot("")}
-          className={`px-4 py-2 rounded-full border backdrop-blur-lg cursor-pointer ${
+          className={`px-4 py-2 rounded-full border backdrop-blur-lg cursor-pointer text-sm ${
             !selectedSlot
               ? "bg-primary text-bg-primary"
               : "bg-bg-primary text-primary"
@@ -95,7 +93,7 @@ const DoctorAppointmentCards = () => {
           <button
             key={slot}
             onClick={() => setSelectedSlot(slot)}
-            className={`px-4 py-2 rounded-full border cursor-pointer ${
+            className={`px-4 py-2 rounded-full border cursor-pointer text-sm ${
               selectedSlot === slot
                 ? "bg-primary text-bg-primary"
                 : "bg-transparent backdrop-blur-lg text-primary"
@@ -107,14 +105,14 @@ const DoctorAppointmentCards = () => {
       </div>
 
       {/* Appointments Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
         {filteredAppointments.map((appt) => (
           <div
             key={appt._id}
-            className="border rounded-3xl backdrop-blur-lg shadow-md p-6 space-y-4"
+            className="border rounded-3xl backdrop-blur-lg shadow-md p-4 sm:p-6 space-y-4"
           >
-            <div className="flex justify-between items-start">
-              <h3 className="text-xl font-bold text-primary truncate hover:whitespace-normal hover:overflow-visible hover:text-clip cursor-pointer">
+            <div className="flex justify-between items-start gap-2">
+              <h3 className="text-lg sm:text-xl font-bold text-primary break-words">
                 {appt.patientName} (Age: {appt.patientAge})
               </h3>
               <span
@@ -128,7 +126,7 @@ const DoctorAppointmentCards = () => {
               </span>
             </div>
 
-            <div className="text-sm space-y-2 text-secondary">
+            <div className="text-sm space-y-1 sm:space-y-2 text-secondary">
               <p>
                 <strong>Time Slot:</strong> {appt.timeSlot}
               </p>
@@ -140,7 +138,7 @@ const DoctorAppointmentCards = () => {
             {appt.status === "booked" && (
               <button
                 onClick={() => markAsCompleted(appt._id)}
-                className="px-4 py-2 bg-green-600 text-white rounded-3xl hover:bg-green-700 transition"
+                className="w-full px-4 py-2 bg-green-600 text-white rounded-3xl hover:bg-green-700 transition"
               >
                 Mark as Completed
               </button>

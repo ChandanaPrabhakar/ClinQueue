@@ -47,22 +47,25 @@ const SpecialtySelection: React.FC<SpecialtySelectionProps> = ({
   onSelect,
 }) => {
   return (
-    <div className="w-full max-w-5xl mx-auto px-4">
-      <h2 className="text-xl font-semibold text-primary text-center mb-6">
+    <div className="w-full max-w-6xl mx-auto px-4 py-6">
+      <h2 className="text-2xl font-bold text-primary text-center mb-8">
         What do you need help with?
       </h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
         {specialties.map((specialty, index) => (
           <motion.div
             whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
             key={specialty}
             onClick={() => onSelect(specialty)}
-            className="cursor-pointer bg-white border border-primary shadow-md hover:shadow-lg transition-all rounded-full p-4 text-center"
+            className="cursor-pointer bg-white border border-primary shadow-sm hover:shadow-md transition-all rounded-3xl p-4 flex flex-col items-center text-center"
           >
-            <div className="text-primary text-3xl font-bold mb-2 flex justify-center">
+            <div className="text-primary text-3xl mb-2">
               {medicalIcons[index]}
             </div>
-            <div className="text-md text-secondary  font-bold">{specialty}</div>
+            <div className="text-sm sm:text-base font-semibold text-secondary">
+              {specialty}
+            </div>
           </motion.div>
         ))}
       </div>

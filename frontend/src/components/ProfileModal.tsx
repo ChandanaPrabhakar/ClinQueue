@@ -41,10 +41,10 @@ const ProfileModal: React.FC<ProfileModalProp> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-transparent backdrop-blur-lg flex items-center justify-center z-50">
-      <div className="border-3 bg-secondary/50 rounded-3xl shadow-2xl shadow-bg-secondary border-primary flex justify-center items-center flex-col relative p-6">
+    <div className="fixed inset-0 bg-transparent backdrop-blur-lg flex items-center justify-center z-50 px-4">
+      <div className="w-full max-w-md sm:max-w-lg border-3 bg-secondary/50 rounded-3xl shadow-2xl shadow-bg-secondary border-primary flex justify-center items-center flex-col relative p-6">
         <motion.button
-          className="absolute top-5 right-5"
+          className="absolute top-4 right-4 sm:top-5 sm:right-5"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={onClose}
@@ -52,11 +52,11 @@ const ProfileModal: React.FC<ProfileModalProp> = ({
           <MdClose className="text-2xl cursor-pointer hover:bg-secondary hover:text-bg-primary rounded-full" />
         </motion.button>
 
-        <div className="w-25 h-25 flex items-center justify-center bg-bg-secondary text-5xl rounded-full my-4">
+        <div className="w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center bg-bg-secondary text-4xl sm:text-5xl rounded-full my-4">
           {initials}
         </div>
 
-        <div className="w-75 border border-primary bg-bg-primary/60 font-medium rounded-3xl my-4 px-4 py-2">
+        <div className="w-full border border-primary bg-bg-primary/60 font-medium rounded-3xl my-4 px-4 py-2 text-sm sm:text-base">
           {editMode ? (
             <input
               className="w-full border-none outline-none bg-transparent"
@@ -68,7 +68,7 @@ const ProfileModal: React.FC<ProfileModalProp> = ({
           )}
         </div>
 
-        <div className="w-75 border border-primary bg-bg-primary/60 font-medium rounded-3xl my-4 px-4 py-2">
+        <div className="w-full border border-primary bg-bg-primary/60 font-medium rounded-3xl my-4 px-4 py-2 text-sm sm:text-base">
           {editMode ? (
             <input
               type="number"
@@ -81,7 +81,7 @@ const ProfileModal: React.FC<ProfileModalProp> = ({
           )}
         </div>
 
-        <div className="w-75 border border-primary bg-bg-primary/60 font-medium rounded-3xl my-4 px-4 py-2">
+        <div className="w-full border border-primary bg-bg-primary/60 font-medium rounded-3xl my-4 px-4 py-2 text-sm sm:text-base">
           {editMode ? (
             <input
               type="tel"
@@ -94,9 +94,9 @@ const ProfileModal: React.FC<ProfileModalProp> = ({
           )}
         </div>
 
-        <div className="flex flex-row gap-3">
+        <div className="flex flex-col sm:flex-row gap-3 w-full justify-center mt-2">
           <motion.button
-            className="mt-4 w-30 font-medium justify-center bg-primary text-white px-4 py-2 rounded-full flex items-center gap-2 cursor-pointer"
+            className="w-full sm:w-1/2 font-medium justify-center bg-primary text-white px-4 py-2 rounded-full flex items-center gap-2 cursor-pointer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
             onClick={editMode ? handleSave : () => setEditMode(true)}
@@ -104,7 +104,7 @@ const ProfileModal: React.FC<ProfileModalProp> = ({
             {editMode ? "Save" : "Edit"}
           </motion.button>
           <motion.button
-            className="mt-4 w-30 font-medium justify-center bg-primary text-white px-4 py-2 rounded-full flex items-center gap-2 cursor-pointer"
+            className="w-full sm:w-1/2 font-medium justify-center bg-primary text-white px-4 py-2 rounded-full flex items-center gap-2 cursor-pointer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
             onClick={editMode ? () => setEditMode(false) : onClose}

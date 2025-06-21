@@ -15,6 +15,7 @@ import Logo from "../../components/Logo";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 
+// Define steps
 const steps = [
   "Select Specialty",
   "Choose Doctor",
@@ -32,23 +33,29 @@ const BookAppointment = () => {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [appointmentDetails, setAppointmentDetails] = useState<any>(null);
   const [slotUsage, setSlotUsage] = useState<Record<string, number>>({});
+
+  const navigate = useNavigate();
   const location = useLocation();
   const passedDoctor = location.state?.selectedDoctor;
-  const navigate = useNavigate();
 
+  // Fetch doctors based on specialty
   useEffect(() => {
     if (selectedSpecialty && activeStep === 1) {
       fetchDoctorsBySpecialty();
     }
+  }, [selectedSpecialty, activeStep]);
 
+  // Initialize if passed from route
+  useEffect(() => {
     if (passedDoctor) {
       setSelectedDoctor(passedDoctor);
       setSelectedSpecialty(passedDoctor.specialization);
       setActiveStep(2);
       window.history.replaceState({}, document.title);
     }
-  }, [selectedSpecialty, activeStep, passedDoctor]);
+  }, []);
 
+  // Fetch slot usage
   useEffect(() => {
     if (selectedDoctor && activeStep === 2) {
       fetchSlotUsage(selectedDoctor._id);
@@ -66,18 +73,6 @@ const BookAppointment = () => {
     }
   };
 
-  const handleNext = () => setActiveStep((prev) => prev + 1);
-  const handleBack = () => setActiveStep((prev) => prev - 1);
-  const handleCancel = () => {
-    setIsSuccessModalOpen(false);
-    navigate("/find-my-doctor");
-  };
-
-  const handleSpecialtySelect = (specialty: string) => {
-    setSelectedSpecialty(specialty);
-    handleNext();
-  };
-
   const fetchSlotUsage = async (doctorId: string) => {
     try {
       const res = await axiosInstance.get(`/user/doctor-slot-usage`, {
@@ -89,6 +84,19 @@ const BookAppointment = () => {
     }
   };
 
+  const handleNext = () => setActiveStep((prev) => prev + 1);
+  const handleBack = () => setActiveStep((prev) => prev - 1);
+
+  const handleCancel = () => {
+    setIsSuccessModalOpen(false);
+    navigate("/find-my-doctor");
+  };
+
+  const handleSpecialtySelect = (specialty: string) => {
+    setSelectedSpecialty(specialty);
+    handleNext();
+  };
+
   const handleDoctorSelect = (doctor: any) => {
     setSelectedDoctor(doctor);
     fetchSlotUsage(doctor._id);
@@ -96,6 +104,11 @@ const BookAppointment = () => {
   };
 
   const handleBookAppointment = async () => {
+    if (!selectedSlot) {
+      toast.error("Please select a time slot before continuing.");
+      return;
+    }
+
     try {
       const userResponse = await axiosInstance.get("/user/get-user");
       const user = userResponse.data.data;
@@ -178,17 +191,21 @@ const BookAppointment = () => {
     >
       <BackgroundAnime />
       <Logo />
-      <div className="max-w-3xl mx-auto bg-transparent backdrop-blur-lg border border-primary rounded-2xl shadow-lg overflow-hidden p-6">
+      <div className="w-full max-w-3xl mx-auto bg-transparent backdrop-blur-lg border border-primary rounded-2xl shadow-lg overflow-hidden p-4 sm:p-6">
         <Stepper activeStep={activeStep} alternativeLabel className="mb-8">
           {steps.map((label) => (
             <Step key={label}>
               <StepLabel
                 sx={{
+                  "& .MuiStepLabel-label": {
+                    whiteSpace: "normal",
+                    textAlign: "center",
+                  },
                   "& .MuiStepIcon-root.Mui-completed": {
-                    color: "var(--color-primary)", // completed step color
+                    color: "var(--color-primary)",
                   },
                   "& .MuiStepIcon-root.Mui-active": {
-                    color: "var(--color-primary)", // active step color
+                    color: "var(--color-primary)",
                   },
                 }}
               >
@@ -200,12 +217,15 @@ const BookAppointment = () => {
 
         <div className="mt-8">{getStepContent(activeStep)}</div>
 
+        {/* Success Modal */}
         <Modal
           open={isSuccessModalOpen}
           onClose={() => setIsSuccessModalOpen(false)}
-          className="flex items-center justify-center backdrop-blur-md"
+          className="flex items-center justify-center backdrop-blur-md px-4"
+          aria-labelledby="appointment-success-title"
+          aria-describedby="appointment-success-description"
         >
-          <div className="bg-transparent backdrop-blur-3xl border-5 border-primary rounded-3xl p-6 max-w-md w-full mx-4">
+          <div className="bg-white dark:bg-bg-primary backdrop-blur-3xl border-4 border-primary rounded-3xl p-6 w-full max-w-md mx-auto overflow-y-auto max-h-[90vh]">
             <div className="flex justify-end">
               <IconButton onClick={() => setIsSuccessModalOpen(false)}>
                 <Close />
