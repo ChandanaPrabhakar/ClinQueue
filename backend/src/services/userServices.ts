@@ -63,11 +63,13 @@ export const bookAppointmentService = async (
     const existingAppointmentSameDoctor = await Appointment.findOne({
       userId: id,
       doctorId: doctorId,
+      status: { $ne: "completed" },
     });
 
     const existingAppointmentSameTime = await Appointment.findOne({
       userId: id,
       timeSlot,
+      status: { $ne: "completed" },
     });
 
     if (existingAppointmentSameDoctor || existingAppointmentSameTime) {
